@@ -1,0 +1,16 @@
+<#import "/WEB-INF/component/user.cm" as us />
+<html>
+<head>
+    <title>${user.name} Profile</title>
+</head>
+<body>
+<div id="content">
+    <h2>${user.name} Profile</h2>
+    <div class="left-col-a">
+        <@us.profile user=user cls='profile'/>
+    </div>
+    <div class="right-col-a">
+    </div>
+</div>
+</body>
+</html>

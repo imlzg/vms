@@ -1,0 +1,25 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/tag.cm"    as tg />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(tag.name)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>标签：${(tag.name)!}</h1>
+
+    <div class="left">
+        <h6 class="note-bar">大家把这些标注为“${(tag.name)!}”</h6>
+        <@mv.popu lst=movies cls='popu'/>
+        <@b.pagination page=page url=base+ '/tag/' + (tag.name)! + '/' cls='pagination'/>
+    </div>
+
+    <div class="righ">
+        <h2>相关...</h2>
+        <@tg.enum lst=tags cls=''/>
+    </div>
+    <div class="side"><@ad.enum lst=bills/></div>
+</div>
+</body>
+</html>

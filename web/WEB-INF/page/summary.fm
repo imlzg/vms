@@ -1,0 +1,26 @@
+<#import "/WEB-INF/component/movie.cm"   as mv />
+<#import "/WEB-INF/component/advert.cm"  as ad />
+<html>
+<head>
+    <title>${mv.makeTitle(movie)}</title>
+    <meta name="keywords" content="${(movie.title)!},${(movie.chinese)!},${(movie.pinyin)!},${(movie.aka)!}" />
+    <meta name="description" content="${b.plainString(movie.summary, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${mv.makeTitle(movie)}</h1>
+    <div class="left">
+        <div class="summary">
+        ${b.htmlFormat(movie.summary)!}
+        </div>
+        <br class="clear"/>
+
+    </div>
+    <div class="righ">
+        <@mv.view movie=movie cls='movie'/>
+        <br class="clear"/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

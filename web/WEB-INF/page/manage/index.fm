@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/movie.cm" as mv />
+<#import "/WEB-INF/component/star.cm"  as st />
+<#import "/WEB-INF/component/news.cm"  as nw />
+<html>
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div id="content">
+    <h1>Index</h1>
+    <hr/>
+
+    <@mv.index><h2>重建movie索引</h2></@>
+    <@st.index><h2>重建star索引</h2></@>
+    <@nw.index><h2>重建news索引</h2></@>
+    <hr/>
+</div>
+</body>
+</html>

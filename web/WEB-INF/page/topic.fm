@@ -1,0 +1,20 @@
+<#import "/WEB-INF/component/topic.cm"  as tp />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(topic.title)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(topic.title)!}</h1>
+    <div class="left">
+${(topic.content)!}
+    </div>
+    <div class="righ">
+        <@mv.view movie=topic.movie title=true cls='movie'/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

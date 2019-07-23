@@ -1,0 +1,24 @@
+<#import "/WEB-INF/component/collect.cm" as cl />
+<#import "/WEB-INF/component/advert.cm"  as ad />
+<html>
+<head>
+    <title>收藏</title>
+</head>
+<body>
+<div id="content">
+    <h1>收藏</h1>
+    <div class="left">
+        <#if (collects?has_content)>
+        <ul class="table">
+            <li class="title">收藏名称</li><li class="user">创建者</li><li class="size">视频数量</li><li class="date">创建日期</li>
+        </ul>
+        </#if>
+        <@cl.enum lst=collects cls='table'/>
+    </div>
+    <div class="righ">
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

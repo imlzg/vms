@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/plot.cm" as pl />
+<#import "/WEB-INF/component/hint.cm" as h />
+<html>
+<head>
+    <title>编辑“${(plot.title)!}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(plot.title)!}”</h1>
+    <div class="left">
+        <@pl.edit plot=plot cls="add-plot" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

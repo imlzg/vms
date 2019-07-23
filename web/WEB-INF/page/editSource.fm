@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/source.cm" as sc />
+<#import "/WEB-INF/component/hint.cm"   as h />
+<html>
+<head>
+    <title>编辑“${(source.name)!}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(source.name)!}”</h1>
+    <div class="left">
+        <@sc.edit source=source cls="add-source" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<#import "/WEB-INF/component/port.cm"    as pt />
+<#import "/WEB-INF/component/movie.cm"   as mv />
+<#import "/WEB-INF/component/star.cm"    as st />
+<#import "/WEB-INF/component/news.cm"    as nw />
+<#import "/WEB-INF/component/ad.cm"     as ad />
+<html>
+<head>
+    <meta name="verify-v1" content="SS1kcwkWWRsAg98yNxvZa3TAKYpPRbtt47+dHlIKE6w=" />
+    <meta name="keywords" content="视联,电视剧情,海报剧照,人物明星写真,热播,最新电影" />
+    <meta name="description" content="视联为用户提供丰富的电视剧、电影信息，剧情、海报剧照、人物明星写真，推荐精彩热播的电影、电视剧" />
+</head>
+<body>
+<h1 class="hidden">视联为用户提供丰富的电视剧、电影信息，剧情、海报剧照、人物明星写真，推荐精彩热播的电影、电视剧</h1>
+<div id="content">
+    <div class="left">
+        <@mv.gallery lst=recMovies cls='gallery'><h2>影视... <span class="pl">(<a href="${base}/movies">更多</a>)</span></h2></@>
+        <br class="clear"/>
+        <br/>
+
+        <@st.gallery lst=recStars size='small' cls='gallery'><h2>人物... <span class="pl">(<a href="${base}/stars">更多</a>)</span></h2></@>
+        <br class="clear"/>
+        <br/>
+
+        <@nw.enum lst=recNewz cls=''><h2>资讯... <span class="pl">(<a href="${base}/news">更多</a>)</span></h2></@>
+        <br class="clear"/>
+        <br/>
+    </div>
+    <div class="righ">
+        <@mv.enum lst=topMovies cls='list'><h2>热门影视...</h2></@>
+        <br class="clear"/>
+        <@st.enum lst=topStars cls='list'><h2>热门人物...</h2></@>
+        <br class="clear"/>
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

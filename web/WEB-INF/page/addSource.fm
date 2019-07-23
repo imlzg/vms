@@ -1,0 +1,21 @@
+<#import "/WEB-INF/component/movie.cm"  as en />
+<#import "/WEB-INF/component/source.cm" as sc />
+<#import "/WEB-INF/component/hint.cm"   as h />
+<html>
+<head>
+    <title>给“${(movie.title)!}”添加视频</title>
+</head>
+<body>
+<div id="content">
+    <h1>给“${(movie.title)!}”添加视频</h1>
+    <div class="left">
+        <@sc.add movie=movie cls="add-source" />
+    </div>
+    <div class="righ">
+        <a href="${en.viewURL(movie)}">返回 ${(movie.title)!}</a><br />
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

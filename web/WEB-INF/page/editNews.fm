@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/news.cm" as nw />
+<#import "/WEB-INF/component/hint.cm" as h />
+<html>
+<head>
+    <title>编辑“${(news.title)!}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(news.title)!}”</h1>
+    <div class="left">
+        <@nw.edit news=news cls="add-news" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

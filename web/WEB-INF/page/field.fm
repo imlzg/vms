@@ -1,0 +1,22 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(q)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(q)!}</h1>
+
+    <div class="left">
+        <@mv.popu lst=page.items cls='popu'/>
+        <@b.pagination page=page url=base + '/'+ field +'/' + q + '/' cls='pagination'/>
+    </div>
+
+    <div class="righ">
+
+    </div>
+    <div class="side"><@ad.enum lst=bills/></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+    <persistence-unit name="vms">
+        <!-- -->
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <non-jta-data-source>java:comp/env/jdbc/tvlian</non-jta-data-source>
+
+        <mapping-file>META-INF/orm.xml</mapping-file>
+
+        <class>org.gaozou.jimmy.vms.domain.Ad</class>
+        <class>org.gaozou.jimmy.vms.domain.Port</class>
+        <class>org.gaozou.jimmy.vms.domain.User</class>
+        <class>org.gaozou.jimmy.vms.domain.Options</class>
+
+        <class>org.gaozou.jimmy.vms.domain.Movie</class>
+        <class>org.gaozou.jimmy.vms.domain.Star</class>
+        <class>org.gaozou.jimmy.vms.domain.News</class>
+        <class>org.gaozou.jimmy.vms.domain.Album</class>
+        <class>org.gaozou.jimmy.vms.domain.Pic</class>
+        <class>org.gaozou.jimmy.vms.domain.Tag</class>
+
+        <class>org.gaozou.jimmy.vms.domain.tag.TagMovie</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.TagStar</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.TagNews</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.TagAlbum</class>
+
+        <class>org.gaozou.jimmy.vms.domain.tag.UserTagMovie</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.UserTagStar</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.UserTagNews</class>
+        <class>org.gaozou.jimmy.vms.domain.tag.UserTagAlbum</class>
+
+        <properties>
+            <property name="hibernate.archive.autodetection"                        value="class,hbm"/>
+            <property name="hibernate.dialect"                                      value="org.hibernate.dialect.MySQLInnoDBDialect"/>
+            <property name="hibernate.hbm2ddl.auto"                                 value="update"/>
+
+            <property name="hibernate.show_sql"                                     value="false"/>
+            <property name="hibernate.format_sql"                                   value="true"/>
+            <property name="hibernate.use_sql_comments"                             value="true"/>
+
+            <property name="hibernate.search.analyzer"                              value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+            <property name="hibernate.search.default.directory_provider"            value="org.hibernate.search.store.FSDirectoryProvider"/>
+            <property name="hibernate.search.default.indexBase"                     value="/home/george/tmp/indexes/vms"/>
+            <!--<property name="hibernate.search.default.indexBase"                     value="/var/www/www.tvlian.com/indexes"/>-->
+            <property name="hibernate.search.default.optimizer.operation_limit.max" value="80"/>
+
+            <property name="hibernate.cache.provider_class"                         value="org.gaozou.jimmy.base.support.hibernate.MemcachedCacheProvider"/>
+            <property name="hibernate.cache.use_query_cache"                        value="true"/>
+
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

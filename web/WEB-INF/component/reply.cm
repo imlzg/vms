@@ -1,0 +1,72 @@
+<#import "/WEB-INF/component/user.cm" as us />
+
+<#macro view reply={} cls=''>
+    <#if (reply?has_content)>
+    <dl class="${cls}">
+        <dt>
+        <a href="${us.userHome(reply.user)}">${(reply.user.name)!}</a> ${b.date((reply.editTime)!, 'yy-MM-dd HH:mm')}
+        <@b.authz oper=oper domain=reply act='/deletereply'>| <a href="${base}/deletereply/${(reply.id)!}" onclick="return confirmDelete();">删除</a></@>
+        </dt>
+        <dd>${b.htmlFormat(reply.content)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#list lst as reply>
+    <@view reply=reply cls='${cls}'/>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro add topic={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.validate fields=['reply.content']/>
+    <@b.form id="create-reply" action="${base}/savereply" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="topic.id" value="${topic.id}"/>
+        <li><@b.textarea name="reply.content" cols="50" rows="10"/></li>
+        <li><@b.submit value="add" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro edit reply={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form id="create-reply" action="${base}/savereply" method="post" valids=['reply.content']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="reply.id" value="${reply.id}"/>
+        <li><@b.textarea name="reply.content" cols="50" rows="10">${(reply.content)!}</@></li>
+        <li><@b.input type="submit" value="update" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as reply>
+        <li>
+            <a href="${base}/manage/reply/update_${reply.id}">${(reply.id)!} by ${reply.user.name}</a> |
+            <a href="${base}/manage/reply/remove_${reply.id}">remove</a>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form reply={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/reply/persist" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="reply.id" value="${(reply.id)!}"/>
+        <li><label for="reply.content">Summary: </label><@b.textarea id="reply.content" name="reply.content" cols="50" rows="10">${(reply.content)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>

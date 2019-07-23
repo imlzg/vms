@@ -1,0 +1,13 @@
+<#import "/WEB-INF/component/port.cm" as pt />
+<html>
+<head>
+    <title>Port</title>
+</head>
+<body>
+<div id="content">
+    <h1>Port</h1>
+    <@pt.form port=port cls=''/>
+    <@pt.manage lst=ports cls=''/>
+</div>
+</body>
+</html>

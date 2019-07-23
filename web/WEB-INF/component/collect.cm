@@ -1,0 +1,104 @@
+<#import "/WEB-INF/component/movie.cm" as en />
+<#import "/WEB-INF/component/user.cm"  as us />
+
+<#assign WANT = 1 />
+<#assign SEEN = 2 />
+
+<#macro gather movie={} collect={} cls=''>
+    <#if (movie?has_content)>
+    <#nested>
+    <span id="collect" class="collect_${(collect.type)!0}">
+        <span class="title">加入我的收藏</span>
+        <span id="collect_want" class="btn1">想看</span>
+        <span id="collect_seen" class="btn1">看过</span>
+    </span>
+    <script type="text/javascript">
+        // <![CDATA[
+        gather('${movie.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
+
+
+
+
+<#macro collect1 lst=[] cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <#if (lst?has_content)>
+    <@b.form id="select-collection-form" action="${base}/savecollects" method="post">
+    <@b.hidden name="redirect" value="${redirect!}"/>
+    <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+    <#list lst as collect>
+    <li><@b.checkbox name="collectIds[${collect_index}]" value="${(collect.id)!}"/> ${(collect.name)!}</li>
+    </#list>
+    <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </#if>
+    </ul>
+</#macro>
+
+
+
+
+
+
+
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as album>
+    <ul class="${cls}">
+        <li class="title">
+        <a href="${base}/album/${(album.name)!}">${(album.name)!}</a>
+        </li>
+        <li class="user"><a href="${base}/people/${(album.user.name)!?url}">${(album.user.name)!}</a></li>
+        <li class="size">${(album.movies)!?size}</li>
+        <li class="date">${b.date((album.createDate)!, 'yyyy-MM-dd')}</li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro albums lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+    <#list lst as album>
+        <li><a href="${base}/collect/${(album.name)!}">${(album.name)!}</a> <span class="user">(<a href="${base}/people/${(album.user.name)!?url}">${(album.user.name)!}</a>)</span></li>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as album>
+        <li>
+            <span>${album.id} ${(album.name)!}</span>
+            <a href="${base}/manage/movie/in_${album.id}">movies</a> |
+            <a href="${base}/manage/album/update_${album.id}">Update</a> |
+            <a href="${base}/manage/album/remove_${album.id}">Remove</a>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form album={} cls=''>
+    <ul>
+    <@b.form id="album-form" action="${base}/manage/album/persist" method="post">
+    <@b.hidden name="redirect" value="${redirect!}"/>
+    <@b.hidden name="album.id" value="${(album.id)!}"/>
+    <li><label for="album.name">Name: </label><@b.text id="album.name" name="album.name" value="${(album.name)!}"/></li>
+    <li><label for="album.description">Description: </label><@b.textarea id="album.description" name="album.description" cols="50" rows="6">${(album.description)!}</@> </li>
+    <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>

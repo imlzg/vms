@@ -1,0 +1,64 @@
+<#import "/WEB-INF/component/movie.cm"   as mv />
+<#import "/WEB-INF/component/source.cm"  as sc />
+<#import "/WEB-INF/component/plot.cm"    as pt />
+<#import "/WEB-INF/component/pict.cm"    as pc />
+<#import "/WEB-INF/component/collect.cm" as cl />
+<#import "/WEB-INF/component/advert.cm"  as ad />
+<#import "/WEB-INF/component/rating.cm"  as rt />
+<#import "/WEB-INF/component/tag.cm"     as tg />
+<#import "/WEB-INF/component/topic.cm"   as tp />
+<#import "/WEB-INF/component/star.cm"    as st />
+<#import "/WEB-INF/component/intent.cm"    as it />
+<html>
+<head>
+    <title>${mv.makeTitle(movie)}</title>
+    <meta name="keywords" content="${(movie.title)!},${(movie.chinese)!},${(movie.pinyin)!},${(movie.aka)!}" />
+    <meta name="description" content="${b.plainString(movie.summary, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${mv.makeTitle(movie)}</h1>
+    <div class="left">
+        <@tg.tagsCan toTags=toTags myTags=myTags hotTags=hotTags tags=tags cls='tags-can' />
+
+        <@it.vote intent=intent cls='rating-box' />
+        <br class="clear"/>
+
+        <@tg.enum lst=tags cls='tags'/>
+        <br class="clear"/>
+
+        <@mv.summary movie=movie cls='summary'/>
+        <br class="clear"/>
+
+        <@mv.gallery lst=relates cls='gallery'><h2>看"${(movie.title)!}"的人也看...</h2></@>
+        <br class="clear"/>
+
+        <@st.gallery lst=stars cls='star-gallery'><h2>人物...</h2></@>
+        <br class="clear"/>
+
+        <@pc.enum lst=picts cls='picts'><h2>海报... <span class="pl">(<a href="${base}/movie/${movie.id}_picts">更多</a>)</span></h2></@>
+        <br class="clear"/>
+
+        <@pt.enum lst=plots cls='plots'><h2>剧情... <span class="pl">(<a href="${base}/movie/${movie.id}_plots">全部</a>)</span></h2></@>
+        <br class="clear"/>
+
+        <br />
+
+        <a href="${base}/movie/${movie.id}_addtopic" class="btn">发表讨论</a>
+        <br class="clear"/>
+        <br />
+        <@tp.summaries lst=topics cls='topic-summ'>讨论... <span class="pl">(<a href="${base}/movie/${movie.id}_topics">更多</a>)</span></@>
+        <br />
+    </div>
+    <div class="righ">
+        <@mv.view movie=movie cls='movie'/>
+        <br class="clear"/>
+        <@mv.manage movie=movie/>
+        <br />
+
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

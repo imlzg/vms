@@ -1,0 +1,216 @@
+<#import "/WEB-INF/component/user.cm" as us />
+
+<#assign types = {"video": "10", "down": "11", "bt": "12", "emule": "13", "thunder": "14"} />
+
+<#macro menu cls=''>
+    <#if (types?has_content)>
+    <#nested>
+    <#list types as tt>
+    <ul class="${cls}">
+        <li><a href="${base}/source/${(source.id)!}" title="${(source.name)!}">${(source.name)!}</a></li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro view source={} cls=''>
+    <#if (source?has_content)>
+    <dl class="${cls}">
+        <#switch source.type!''>
+        <#case types.video>
+            <dt class="video"><a href="/source/${(source.id)!}_show" target="tvlian_show">${(source.name)!}</a></dt>
+            <#break>
+        <#case types.down>
+            <dt class="down"><a href="${(source.link)!}" target="tvlian_down">${(source.name)!}</a></dt>
+            <#break>
+        <#case types.bt>
+            <dt class="bt"><a href="${(source.link)!}" target="tvlian_down">${(source.name)!}</a></dt>
+            <#break>
+        <#case types.emule>
+            <dt class="emule"><a href="${(source.link)!}" target="tvlian_down">${(source.name)!}</a></dt>
+            <#break>
+        <#case types.thunder>
+            <dt class="thunder"><a href="${(source.link)!}" target="tvlian_down">${(source.name)!}</a></dt>
+            <#break>
+        <#default>
+            <dt class="down"><a href="${(source.link)!}" target="tvlian_down">${(source.name)!}</a></dt>
+        </#switch>
+        <dd>${b.htmlFormat(source.overview)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro column lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+    <dt><#nested></dt>
+    <#list lst as source>
+    <dd><a href="${base}/source/${(source.id)!}" title="${(source.name)!}">${(source.name)!}</a></dd>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as source>
+    <ul class="${cls}">
+        <li class="name">${source_index + 1}. <a href="${base}/source/${(source.id)!}" title="${(source.name)!}">${(source.name)!}</a></li>
+        <li class="play">
+        <#switch source.type!''>
+        <#case types.video>
+            <a href="/source/${(source.id)!}_show" target="tvlian_show"><img src="${base}/styles/img/video.gif" title="点击播放"/></a>
+            <#break>
+        <#case types.down>
+            <a href="${(source.link)!}" target="tvlian_down"><img src="${base}/styles/img/down.gif" title="点击下载"/></a>
+            <#break>
+        <#case types.bt>
+            <a href="${(source.link)!}" target="tvlian_down"><img src="${base}/styles/img/bt.gif" title="点击下载"/></a>
+            <#break>
+        <#case types.emule>
+            <a href="${(source.link)!}" target="tvlian_down"><img src="${base}/styles/img/emule.gif" title="点击下载"/></a>
+            <#break>
+        <#case types.thunder>
+            <a href="${(source.link)!}" target="tvlian_down"><img src="${base}/styles/img/thunder.gif" title="点击下载"/></a>
+            <#break>
+        <#default>
+            <a href="${(source.link)!}" target="tvlian_down"><img src="${base}/styles/img/down.gif" title="点击打开"/></a>
+        </#switch>
+        </li>
+        <li class="user"><a href="${base}/people/${(source.user.name)!?url}">${(source.user.name)!}</a></li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+
+
+<#macro add movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li>
+        <@b.actionErrs/>
+        <@b.actionMsgs/>
+    </li>
+    <@b.form action="${base}/savesource" method="post" valids=['movie.id','source.name','source.link']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li>
+            <label>类型</label>
+            <select name="source.type" size="1">
+                <option value="10">在线</option>
+                <option value="11">下载</option>
+                <option value="12">BT</option>
+                <option value="13">电驴</option>
+                <option value="14">迅雷</option>
+            </select>
+        </li>
+        <li>
+            <label>视频的名字</label>
+            <@b.text name="source.name" size="36"/>
+        </li>
+        <li>
+            <label>连接地址</label>
+            <@b.text name="source.link" size="57"/>
+        </li>
+        <li>
+            <label>简单描述</label>
+            <@b.textarea name="source.overview" cols="56" rows="2"/>
+        </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro edit source={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li>
+        <@b.actionErrs/>
+        <@b.actionMsgs/>
+    </li>
+    <@b.form action="${base}/persistsource" method="post" valids=['source.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="source.id" value="${(source.id)!}"/>
+        <li>
+            <label>类型</label>
+            <select name="source.type" size="1">
+                <option value="10"<#if (source.type == '10')> selected="selected"</#if>>在线</option>
+                <option value="11"<#if (source.type == '11')> selected="selected"</#if>>下载</option>
+                <option value="12"<#if (source.type == '12')> selected="selected"</#if>>BT</option>
+                <option value="13"<#if (source.type == '13')> selected="selected"</#if>>电驴</option>
+                <option value="14"<#if (source.type == '14')> selected="selected"</#if>>迅雷</option>
+            </select>
+        </li>
+        <li>
+            <label>视频的名字</label>
+            <@b.text name="source.name" value="${(source.name)!}" size="36"/>
+        </li>
+        <li>
+            <label>连接地址</label>
+            <@b.text name="source.link" value="${(source.link)!}" size="57"/>
+        </li>
+        <li>
+            <label>简单描述</label>
+            <@b.textarea name="source.overview" cols="56" rows="2">${(source.overview)!}</@>
+        </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+
+<#macro show key='' cls=''>
+    <iframe id="show" name="show" src="${base}/go?key=${key}" frameborder="0"></iframe>
+    <script type="text/javascript">
+        // <![CDATA[
+        function showSize(){
+            var show = $('show');
+            show.setStyle('width', window.getWidth() - 2);
+            show.setStyle('height', window.getHeight() - 32);
+        }
+
+        window.addEvent('resize', function(){
+            showSize();
+        });
+        showSize();
+
+        // ]]>
+    </script>
+</#macro>
+
+
+
+
+<#macro play link={} width='100%' height='100%' cls=''>
+    <div id="player" class="${cls}">
+    <script type="text/javascript">
+        // <![CDATA[
+        var p = new Player('${base}/player', {
+            id: 'flvplayer',
+            container: 'player',
+            vars: {
+                'config': '${base}/player_config?link=${link.id}'
+            }
+        });
+        // ]]>
+    </script>
+    </div>
+</#macro>
+
+
+
+<#function playURL link={}>
+    <#assign movie = (link.episode.movie)! />
+    <#return base + '/' + (movie.category.idc)!?url + '/' + ((movie.id)!) + '_play_' + (link.id)!/>
+</#function>
+
+
+<#function showURL source={}>
+    <#assign movie = (source.movie)! />
+    <#return base + '/' + (movie.category.idc)!?url + '/' + ((movie.id)!) + '_show?source=' + (source.id)!/>
+</#function>

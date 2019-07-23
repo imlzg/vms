@@ -1,0 +1,38 @@
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/photo.cm"  as ph />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/news.cm"   as nw />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(star.name)!}</title>
+    <meta name="keywords" content="${(star.name)!} ${(star.english)!}" />
+    <meta name="description" content="${b.plainString(star.description, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(star.name)!} ${(star.english)!}</h1>
+    <div class="left">
+        <@mv.gallery lst=movies cls='gallery'><h2>${(star.name)!} ${(star.english)!}的作品... <span class="pl">(<a href="${base}/cast/${star.name} ${(star.english)!}">更多</a>)</span></h2></@>
+        <br class="clear"/>
+
+        <@ph.enum lst=photos size='medium' cls='photo-m'><h2>${(star.name)!} ${(star.english)!}的照片... <span class="pl">(<a href="${base}/star/${star.id}_photos">更多</a>)</span></h2></@>
+        <br class="clear"/>
+
+        <@nw.enum lst=news cls=''><h2>${(star.name)!} ${(star.english)!}的相关资讯... <span class="pl">(<a href="${base}/news">更多</a>)</span></h2></@>
+        <br class="clear"/>
+        <br/>
+    </div>
+    <div class="righ">
+        <@st.view star=star cls='star'/>
+        <br class="clear"/>
+        <br />
+        <@st.manage star=star/>
+        <br class="clear"/>
+
+        <@b.authz act='/addphoto'><a href="${base}/star/${star.id}_addphoto" class="btn">添加照片</a></@>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(region.name)!} ${(genus.name)!} ${(category.name)!} 资料库 (共${c!})</title>
+    <meta name="keywords" content="${(category.name)!}" />
+    <meta name="description" content="${(category.name)!}资料库" />
+</head>
+<body>
+<div id="content">
+    <h1>${(region.name)!} ${(genus.name)!} ${(category.name)!} 资料库 <span class="pl">(共${c!})<span></h1>
+
+     <div class="left">
+        <#assign keys = ['?','#','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']/>
+        <p class="pagination">
+        <#list keys as key>
+        <a href="#${key}">${key}</a>
+        </#list>
+        </p>
+
+        <#list keys as key>
+        <@mv.lib lst=indexMap[key] cls='lib'><a name="${key}"></a>${key}</@>
+        </#list>
+
+    </div>
+    <div class="righ">
+        <@rg.lib category=category lst=regions cls='ttt'><h2>地区</h2></@>
+        <br class="clear"/>
+        <@ge.lib category=category lst=genera cls='ttt'><h2>类型</h2></@>
+        <br class="clear"/>
+        <@mv.gallery lst=newz cls='gallery'><h2>新加...</h2></@>
+        <br class="clear"/>
+        <@mv.gallery lst=recommends cls='gallery'><h2>两周推荐...</h2></@>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

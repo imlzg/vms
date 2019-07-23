@@ -1,0 +1,31 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(q)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(q)!}</h1>
+
+    <div class="left">
+        <#if ! ((page.items)?has_content)>
+        <h2>暂时没有信息，您可以用右边的连接添加...</h2>
+        </#if>
+        <@mv.popu lst=page.items cls='popu'/>
+        <@b.pagination page=page url=base + '/search?q=' + q + '&no=' cls='pagination'/>
+    </div>
+
+    <div class="righ">
+        <@mv.addMenu cates=categories cls='add-menu'>
+        <#if (b.hasAuthz(oper, {}, '/addmovie'))>
+        <h2>添加 ${(options.name)!} 没有的...</h2>
+        <#else>
+        <h2><a href="${base}/signup">登录/注册</a>后添加${(options.name)!}没有的...</h2>
+        </#if>
+        </@>
+    </div>
+    <div class="side"><@ad.enum lst=bills/></div>
+</div>
+</body>
+</html>

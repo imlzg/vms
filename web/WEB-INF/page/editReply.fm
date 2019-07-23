@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/reply.cm" as rp />
+<#import "/WEB-INF/component/hint.cm"  as h />
+<html>
+<head>
+    <title>编辑“${(topic.title)!}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(topic.title)!}”</h1>
+    <div class="left">
+        <@tp.edit topic=topic cls="add-topic" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

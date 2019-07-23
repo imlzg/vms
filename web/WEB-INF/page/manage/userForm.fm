@@ -1,0 +1,12 @@
+<#import "/WEB-INF/component/user.cm" as u />
+<html>
+<head>
+    <title>User Firm ${(user.name)!}</title>
+</head>
+<body>
+<div id="content">
+    <h4>设置${(user.name)!}</h4>
+    <@u.form user=user/>
+</div>
+</body>
+</html>

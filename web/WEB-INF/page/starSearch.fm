@@ -1,0 +1,27 @@
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(q)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(q)!}</h1>
+
+    <div class="left">
+        <#if ! ((page.items)?has_content)>
+        <h2>暂时没有信息...</h2>
+        </#if>
+        <@st.gallery lst=page.items cls='star-gallery' />
+        <br class="clear"/>
+        <@b.pagination page=page url=base + '/starsearch?q=' + (q!) + '&no=' cls='pagination'/>
+    </div>
+
+    <div class="righ">
+        <@b.authz act='/addstar'><h2><a href="${base}/addstar">添加</a> ${(options.name)!} 没有的...</h2></@>
+        <br class="clear"/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

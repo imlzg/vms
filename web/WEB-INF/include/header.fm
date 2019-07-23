@@ -1,0 +1,14 @@
+<#import "/WEB-INF/component/port.cm" as pt />
+<#import "/WEB-INF/component/user.cm" as us />
+<div id="header">
+    <div class="logo">
+        <a href="${base}/"><img src="${base}/img/logo.gif" alt="logo" /></a>
+    </div>
+    <div class="nav">
+        <@pt.head lst=heads cls='channel'/>
+        <@us.console cls='channel'/>
+        <br class="clear"/>
+        <@pt.search action='#' cls='search'/>
+    </div>
+</div>
+<br class="clear"/>

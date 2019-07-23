@@ -1,0 +1,156 @@
+<#assign id = (oper.id)!/>
+<#assign email = (oper.idc)!/>
+<#assign name = (oper.name)!/>
+<#assign roles = (oper.roles)!/>
+
+<#macro console cls=''>
+    <ul class="${cls}">
+        <#if (! action.isAnonymous())>
+        <li>· <a href="${userHome(oper)}">我的主页</a></li>
+        <li>· <a href="${userProfile(oper)}">设置</a></li>
+        <li>· <@b.authz act='/manage/'><a href="${base}/manage/">管理</a></@></li>
+        <li>· <a href="${base}/signup">重登录</a></li>
+        <li>· <a href="${base}/logout">退出</a></li>
+        <#else>
+        <li>· <a href="${base}/signup">登录/注册</a></li>
+        </#if>
+    </ul>
+</#macro>
+
+<#macro userGuide1 cls=''>
+    <span class="${cls}"><#t>
+    <#if (isLogin())>
+    <#if name?has_content>
+    <a href="${userProfile(oper)}">${name}的设置</a> · <#t>
+    <a href="${base}/logout">退出</a><#t>
+    </#if>
+    <#else>
+    你好，请 <a href="${base}/signup">登录/注册</a><#t>
+    </#if>
+     · <a href="${base}/help">指南</a></span><#t>
+</#macro>
+
+
+<#macro register cls=''>
+    <#nested>
+    <ul class="${cls}">
+        <@b.form name="register" action="${base}/register" method="post" valids=['register.idc','register.passwd','register.name']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <li><label for="register.idc">邮箱：</label><@b.text id="register.idc" name="register.idc" size="26"/></li>
+        <li><label for="register.passwd">密码：</label><@b.password id="register.passwd" name="register.passwd" size="26"/></li>
+        <li><label for="register.name">名号：</label><@b.text id="register.name" name="register.name" size="26"/></li>
+        <li>check register name</li>
+        <li><@b.submit value="submit" class="button"/> </li>
+        </@>
+    </ul>
+</#macro>
+
+<#macro login cls=''>
+    <#nested>
+    <ul class="${cls}">
+        <@b.form name="login" action="${base}/login" method="post" valids=['login.idc','login.passwd']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <li><label for="login.idc">邮箱：</label><@b.text id="login.idc" name="login.idc" size="26"/></li>
+        <li><label for="login.passwd">密码：</label><@b.password id="login.passwd" name="login.passwd" size="26"/></li>
+        <li><@b.checkbox id="keep" name="keep" value="true" class="keep"/><label class="keep" for="keep">记住我</label></li>
+        <li><@b.submit value="submit" class="button"/></li>
+        </@>
+    </ul>
+</#macro>
+
+<#macro profile user={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/saveprofile" method="post" enctype="multipart/form-data">
+        <@b.hidden name="user.id" value="${user.id}"/>
+        <li><label>名号：</label></li>
+        <li><@b.text name="user.name" value="${user.name}"/> </li>
+        <li><label>头像：</label></li>
+        <li><img src="${base}${(user.icon)!'/icon/user.jpg'}"/></li>
+        <li><label>上传头像：</label></li>
+        <li><@b.file name="upload" size="49" value="Browse ..." /></li>
+        <li><label>自我介绍：</label></li>
+        <li><@b.textarea id="user.intro" name="user.intro" cols="50" rows="10">${(user.intro)?if_exists}</@></li>
+        <li><@b.submit id="submit" value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as user>
+        <li>
+            <span>${user.id} ${(user.name)!}</span>
+            <a href="${base}/manage/user/update_${user.id}">Update</a> |
+            <a href="${base}/manage/user/remove_${user.id}">Remove</a>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form user={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/user/persist" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="user.id" value="${(user.id)!}"/>
+        <li><label>名号：</label><@b.text name="user.name" value="${(user.name)!}"/> </li>
+        <li>
+            <label>头像：</label>
+            <img src="${base}${(user.icon)!'/icon/user.jpg'}"/>
+        </li>
+        <li><label>上传头像：</label><@b.file name="user.icon" size="49"/></li>
+        <li><label>自我介绍：</label><@b.textarea id="user.intro" name="user.intro" cols="50" rows="10">${(user.intro)!}</@></li>
+
+        <li><label>Roles：</label></li>
+        <#if (roleSet?exists)>
+        <#list roleSet as role>
+            <#if (user.roles)?? && (user.roles)?index_of(role) != -1>
+                <@b.checkbox name="roles[${role_index}]" value="${role}" checked=true/>
+            <#else>
+                <@b.checkbox name="roles[${role_index}]" value="${role}"/>
+            </#if>
+            <span>${role}</span>
+        </#list>
+        </#if>
+        <li><@b.submit id="submit" value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+
+
+<#function userHome user>
+    <#return base + '/people/' + (user.name)!?url/>
+</#function>
+
+<#function userProfile user>
+    <#return base + '/profile/' + (user.name)!?url/>
+</#function>
+
+<#function isLogin>
+    <#if (! action.isAnonymous())>
+        <#return true/>
+    </#if>
+    <#return false/>
+</#function>
+
+<#function isRegistered userId>
+    <#if (action.isRegistered(userId))>
+        <#return true/>
+    </#if>
+    <#return false/>
+</#function>
+
+<#function isNameUsed userName>
+    <#if (action.isRegistered(userName))>
+        <#return true/>
+    </#if>
+    <#return false/>
+</#function>

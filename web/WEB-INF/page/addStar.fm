@@ -1,0 +1,24 @@
+<#import "/WEB-INF/component/star.cm" as st />
+<#import "/WEB-INF/component/hint.cm" as h />
+<html>
+<head>
+    <title>添加人物</title>
+</head>
+<body>
+<div id="content">
+    <h1>添加人物</h1>
+    <div class="left">
+
+        <@b.authz act='/batchqqstar'>
+            <@st.batchqq cls='add-star'><h2>从QQ批量抓取...</h2></@>
+        </@>
+
+        <@st.add cls='add-star'><h2>添加人物...</h2></@>
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

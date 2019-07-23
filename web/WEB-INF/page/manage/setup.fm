@@ -1,0 +1,12 @@
+<#import "/WEB-INF/component/port.cm" as pt />
+<html>
+<head>
+    <title>SETUP</title>
+</head>
+<body>
+<div id="content">
+    <h1>SETUP</h1>
+    <@pt.setup cls=''/>
+</div>
+</body>
+</html>

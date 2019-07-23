@@ -1,0 +1,16 @@
+<#import "/WEB-INF/component/user.cm" as u />
+<html>
+<head>
+    <title>manage user</title>
+</head>
+<body>
+<div id="content">
+    <h1>USER</h1>
+    <hr/>
+
+    <@u.manage lst=page.items/>
+    <@b.pagination page=page url=base+ '/manage/user?page=' cls='pagination'/>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-autowire="byName" default-lazy-init="true" default-init-method="init" default-destroy-method="destroy">
+
+    <import resource="classpath:application.xml"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="vms"/>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* org.gaozou..manager..*(..)) or
+                                                     execution(* org.gaozou..*Manager*.*(..)) or
+                                                     execution(* org.gaozou..*DAO*.*(..)) or
+                                                     execution(* org.gaozou..searcher..*(..)) or
+                                                     execution(* org.gaozou..*Search*.*(..))"/>
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="get*"    read-only="true"/>
+            <tx:method name="list*"   read-only="true"/>
+            <tx:method name="find*"   read-only="true"/>
+            <tx:method name="page*"   read-only="true"/>
+            <tx:method name="search*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+
+    <bean id="adAction"    class="org.gaozou.jimmy.vms.action.AdAction"       scope="prototype"/>
+    <bean id="userAction"      class="org.gaozou.jimmy.vms.action.UserAction"     scope="prototype"/>
+    <bean id="portAction"      class="org.gaozou.jimmy.vms.action.PortAction"     scope="prototype"/>
+    <bean id="optionsAction"   class="org.gaozou.jimmy.vms.action.OptionsAction"   scope="prototype"/>
+
+    <bean id="movieAction"     class="org.gaozou.jimmy.vms.action.MovieAction"    scope="prototype"/>
+    <bean id="starAction"      class="org.gaozou.jimmy.vms.action.StarAction"     scope="prototype"/>
+    <bean id="newsAction"      class="org.gaozou.jimmy.vms.action.NewsAction"     scope="prototype"/>
+    <bean id="albumAction"      class="org.gaozou.jimmy.vms.action.NewsAction"     scope="prototype"/>
+    <bean id="picAction"      class="org.gaozou.jimmy.vms.action.PicAction"      scope="prototype"/>
+    <bean id="tagAction"       class="org.gaozou.jimmy.vms.action.TagAction"      scope="prototype"/>
+
+
+    <bean id="adManager"   class="org.gaozou.jimmy.vms.manager.AdManager"/>
+    <bean id="userManager"     class="org.gaozou.jimmy.vms.manager.UserManager"/>
+    <bean id="portManager"     class="org.gaozou.jimmy.vms.manager.PortManager"/>
+    <bean id="optionsManager"  class="org.gaozou.jimmy.vms.manager.OptionsManager"/>
+
+    <bean id="movieManager"    class="org.gaozou.jimmy.vms.manager.MovieManager"/>
+    <bean id="starManager"     class="org.gaozou.jimmy.vms.manager.StarManager"/>
+    <bean id="newsManager"     class="org.gaozou.jimmy.vms.manager.NewsManager"/>
+    <bean id="albumManager"     class="org.gaozou.jimmy.vms.manager.AlbumManager"/>
+    <bean id="picManager"     class="org.gaozou.jimmy.vms.manager.PicManager"/>
+    <bean id="tagManager"      class="org.gaozou.jimmy.vms.manager.TagManager"/>
+
+    <bean id="tagMovieManager"      class="org.gaozou.jimmy.vms.manager.tag.TagMovieManager"/>
+    <bean id="tagStarManager"      class="org.gaozou.jimmy.vms.manager.tag.TagStarManager"/>
+    <bean id="tagNewsManager"      class="org.gaozou.jimmy.vms.manager.tag.TagNewsManager"/>
+    <bean id="tagAlbumManager"      class="org.gaozou.jimmy.vms.manager.tag.TagAlbumManager"/>
+
+
+    <bean id="adDAO"       class="org.gaozou.jimmy.vms.manager.AdManager"            autowire="no"/>
+    <bean id="userDAO"         class="org.gaozou.jimmy.vms.manager.UserManager"          autowire="no"/>
+    <bean id="portDAO"         class="org.gaozou.jimmy.vms.manager.PortManager"          autowire="no"/>
+    <bean id="optionsDAO"       class="org.gaozou.jimmy.vms.manager.OptionsManager"        autowire="no"/>
+
+    <bean id="movieDAO"        class="org.gaozou.jimmy.vms.manager.MovieManager"         autowire="no"/>
+    <bean id="starDAO"         class="org.gaozou.jimmy.vms.manager.StarManager"          autowire="no"/>
+    <bean id="newsDAO"         class="org.gaozou.jimmy.vms.manager.NewsManager"          autowire="no"/>
+    <bean id="albumDAO"         class="org.gaozou.jimmy.vms.manager.AlbumManager"          autowire="no"/>
+    <bean id="pictDAO"         class="org.gaozou.jimmy.vms.manager.PicManager"           autowire="no"/>
+    <bean id="tagDAO"          class="org.gaozou.jimmy.vms.manager.TagManager"           autowire="no"/>
+
+    <bean id="tagMovieDAO"          class="org.gaozou.jimmy.vms.manager.tag.TagMovieManager"  autowire="no"/>
+    <bean id="tagStarDAO"          class="org.gaozou.jimmy.vms.manager.tag.TagStarManager"  autowire="no"/>
+    <bean id="tagNewsDAO"          class="org.gaozou.jimmy.vms.manager.tag.TagNewsManager"  autowire="no"/>
+    <bean id="tagAlbumDAO"          class="org.gaozou.jimmy.vms.manager.tag.TagAlbumManager"  autowire="no"/>
+
+
+    <bean id="movieSearcher"   class="org.gaozou.jimmy.vms.searcher.MovieSearcher"/>
+    <bean id="starSearcher"    class="org.gaozou.jimmy.vms.searcher.StarSearcher"/>
+    <bean id="newsSearcher"    class="org.gaozou.jimmy.vms.searcher.NewsSearcher"/>
+    <bean id="albumSearcher"   class="org.gaozou.jimmy.vms.searcher.AlbumSearcher"/>
+
+
+
+</beans>

@@ -1,0 +1,172 @@
+<#macro tagsCan toTags=[] myTags=[] hotTags=[] tags=[] cls=''>
+    <div class='${cls}'>
+        <span id="tags-can">
+        <#list tags as tag>
+        <span class="b-tag c-tag">${tag.name}</span>
+        </#list>
+        </span>
+
+        <#assign tots = '' />
+        <#list toTags as tag>
+            <#assign tots = tots + ' ' + tag.name />
+        </#list>
+        <span id="to-tags-can">${tots?trim}</span>
+
+        <span id="my-tags-can">
+        <#list myTags as tag>
+        <span class="b-tag c-tag">${tag.name}</span>
+        </#list>
+        </span>
+
+        <span id="hot-tags-can">
+        <#list hotTags as tag>
+        <span class="b-tag c-tag">${tag.name}</span>  
+        </#list>
+        </span>
+    </div>
+</#macro>
+
+<#macro tag movie={} lst=[] cls=''>
+    <#if (movie?has_content)>
+    <#nested>
+    <span class="${cls}">
+        <span id="tag" class="btn1">标签</span>: 
+        <#list lst as tag>
+            <a href="${base}/tag/${(tag.name)!?url}">${(tag.name)!}</a>
+        </#list>
+    </span>
+    <script type="text/javascript">
+        // <![CDATA[
+        tag('${movie.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
+<#macro ls lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <p class="${cls}">
+    <#list lst as tag>
+    <a href="${base}/tag/${(tag.name)!?url}">${(tag.name)!}</a>
+    </#list>
+    </p>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <div class="${cls}">
+    <#list lst as tag>
+    <span><a href="${base}/tag/${(tag.name)!?url}">${(tag.name)!}</a> (${(tag.tums)?size})</span>
+    </#list>
+    </div>
+    </#if>
+</#macro>
+
+
+<#macro cloud lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#assign pmx = 1> <!-- popular -->
+    <#assign hmx = 1> <!-- hit -->
+    <#assign sz = 0>
+    <#list lst as tag>
+        <#assign sz = (tag.tums)?size>
+        <#assign hit = (tag.hit)!0 >
+        <#if (sz > pmx)>
+            <#assign pmx = sz>
+        </#if>
+        <#if (hit > hmx)>
+            <#assign hmx = hit>
+        </#if>
+    </#list>
+    <p class="${cls}">
+    <#list lst as tag>
+    <a href="${base}/tag/${(tag.name)?url}" class="${class(tag, pmx)}" style="color:${color(tag, hmx)};">${(tag.name)!}</a>
+    </#list>
+    </p>
+    </#if>
+</#macro>
+
+
+<#function class tag={} max=1>
+    <#assign p = (tag.tums)?size/max />
+
+    <#if (p <= 1/5)>
+        <#return 'one' >
+    <#elseif p <= 2/5>
+        <#return 'two' >
+    <#elseif p <= 3/5>
+        <#return 'three' >
+    <#elseif p <= 4/5>
+        <#return 'four' >
+    <#else>
+        <#return 'five' >
+    </#if>
+</#function>
+
+<#function color tag={} max=1>
+    <#assign p = ((tag.hit)!0)/max />
+
+    <#if (p <= 1/5)>
+        <#return 'rgb(159,187,243);' >
+    <#elseif p <= 2/5>
+        <#return 'rgb(136,116,246);' >
+    <#elseif p <= 3/5>
+        <#return 'rgb(215,141,223);' >
+    <#elseif p <= 4/5>
+        <#return 'rgb(242,146,159);' >
+    <#else>
+        <#return 'rgb(159,187,243);' >
+    </#if>
+</#function>
+
+
+<#macro cloud2 lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+
+    <#assign mx = 0>
+    <#list lst as tag>
+        <#if (tag[1] > mx)>
+            <#assign mx = tag[1]>
+        </#if>
+    </#list>
+
+    <p class="${cls}">
+    <#list lst as tag>
+    <a href="${base}/tag/${tag[0]?url}" class="${class(tag, mx)}" style="color:${color()}">${tag[0]}(${tag[1]})</a>
+    </#list>
+    </p>
+    </#if>
+</#macro>
+
+
+<#macro cloud1 lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+
+    <#assign sz = lst?size/>
+    <#assign mx = lst?first[1]/>
+    <#assign mn = lst?last[1]/>
+    <#assign df = (mx - mn)/4/>
+    [${sz} , ${mx} , ${mn} , ${df}]
+    <p class="${cls}">
+    <#list lst as tag>
+    <a href="${base}/tag/${tag[0]?url}"
+        <#if (tag[1] - mn >= df * 4)>
+        class="four"
+        <#elseif (tag[1] - mn >= df * 3)>
+        class="three"
+        <#elseif (tag[1] - mn >= df * 2)>
+        class="two"
+        <#elseif (tag[1] - mn >= df * 1)>
+        class="one"
+        </#if>
+    >${tag[0]}(${tag[1]})</a>
+    </#list>
+    </p>
+    </#if>
+</#macro>

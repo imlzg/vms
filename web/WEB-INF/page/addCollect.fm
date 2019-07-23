@@ -1,0 +1,27 @@
+<#import "/WEB-INF/component/collect.cm" as cl />
+<#import "/WEB-INF/component/movie.cm"   as en />
+<#import "/WEB-INF/component/hint.cm"    as h  />
+<html>
+<head>
+    <title>将"${(movie.title)!}"加入专辑</title>
+</head>
+<body>
+<div id="content">
+    <h1>收藏"${(movie.title)!}"</h1>
+    <div class="left">
+        <p class="notice">
+            <@b.fieldErrs/>
+            <@b.actionErrs/>
+            <@b.actionMsgs/>
+        </p>
+        <@cl.collect lst=collects cls='add-collect'><h2>已有收藏...</h2></@>
+        <@cl.add movie=movie cls='add-collect'><h2>新建收藏...</h2></@>
+    </div>
+    <div class="righ">
+        <a href="${en.viewURL(movie)}">返回 ${(movie.title)!}</a><br />
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

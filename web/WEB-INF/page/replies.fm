@@ -1,0 +1,25 @@
+<#import "/WEB-INF/component/topic.cm"  as tp />
+<#import "/WEB-INF/component/reply.cm"  as rp />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(topic.title)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(topic.title)!}</h1>
+    <div class="left">
+        <@tp.view topic=topic cls='topic'/>
+        <br class="clear"/>
+        <@rp.enum lst=page.items cls='post'/>
+        <@b.pagination page=page url=base + '/topic/' + ((topic.id)!) + '_' cls='pagination'/>
+        <@b.authz act='/savereply'><@rp.add topic=topic><h2>回应...</h2></@></@>
+    </div>
+    <div class="righ">
+        <@mv.view movie=topic.movie title=true cls='movie'/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

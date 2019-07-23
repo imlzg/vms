@@ -1,0 +1,12 @@
+<#import "/WEB-INF/component/port.cm" as pt />
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+<div id="content">
+    <h1>Home</h1>
+
+</div>
+</body>
+</html>

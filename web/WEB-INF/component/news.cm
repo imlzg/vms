@@ -1,0 +1,119 @@
+<#macro view news={} cls=''>
+    <#if (news?has_content)>
+    <dl class="${cls}">
+        <dt>${(news.title)!}</dt>
+        <dd>${b.htmlFormat(news.content)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro display news={} cls=''>
+    <#if (news?has_content)>
+    <div class="${cls}">
+        ${b.htmlFormat(news.content)!}
+    </div>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+        <#list lst as news>
+        <li><a href="${viewURL(news)}" title="${(news.title)!}">${(news.title)!}</a></li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro summaries lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as news>
+    <dl class="${cls}">
+        <dt><a href="${base}/news/${(news.id)!}" title="${(news.title)!}">${(news.title)!}</a></dt>
+        <dd>
+        ${b.plainString(news.content, 72)}
+        </dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+
+
+<#macro add cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.actionErrs/>
+    <@b.actionMsgs/>
+    <@b.form action="${base}/savenews" method="post" valids=['news.title','news.content']>
+        <@b.input type="hidden" name="redirect" value="${redirect!}"/>
+        <li><label for="news.title">标题:</label><@b.text id="news.title" name="news.title" size="48"/> </li>
+        <li><label for="news.content">内容: </label><@b.textarea id="news.content" name="news.content" cols="50" rows="10"/> </li>
+        <li><@b.input type="submit" value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+<#macro fetchSina cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/fetchsinanews" method="post" valids=['url']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <li><label>sina url</label><@b.text name="url" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+<#macro batchSina cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/batchsinanews" method="post" valids=['url']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <li><label>sina ent rss url</label><@b.text name="url" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro edit news={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/persistnews" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="news.id" value="${(news.id)!}"/>
+        <li><label for="news.name">标题:</label><@b.text id="news.title" name="news.title" value="${(news.title)!}" size="48"/> </li>
+        <li><label for="news.content">内容: </label><@b.textarea id="news.content" name="news.content" cols="50" rows="10">${(news.content)!}</@> </li>
+        <li><@b.input type="submit" value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro index cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/indexnews" method="post">
+        <li>
+        <label>begId:</label><@b.text name="begId"/> - <label>endId:</label><@b.text name="endId"/>
+        <@b.submit value="submit" class="button"/>
+        </li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro manage news={} cls=''>
+    <@b.authz act='/editnews'><a href="${base}/editnews/${(news.id)!}">编辑</a></@>
+    <@b.authz act='/deletenews'><a href="${base}/deletenews/${(news.id)!}" onclick="return confirmDelete();">删除</a></@>
+    <#if (news.rec)!false>
+    <@b.authz act='/unrecnews'><a href="${base}/unrecnews/${news.id}" onclick="return confirmUnrec();">取消推荐</a></@>
+    <#else>
+    <@b.authz act='/recnews'><a href="${base}/recnews/${news.id}" onclick="return confirmRec();">推荐</a></@>
+    </#if>
+</#macro>
+
+
+
+<#function viewURL news={}>
+    <#return base + '/news/' + (news.id)!/>
+</#function>

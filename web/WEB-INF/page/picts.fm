@@ -1,0 +1,27 @@
+<#import "/WEB-INF/component/pict.cm"   as pc />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/topic.cm"  as tp />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(movie.title)!} 海报</title>
+    <meta name="keywords" content="${(movie.title)!} 海报" />
+    <meta name="description" content="${(movie.title)!} 海报" />
+</head>
+<body>
+<div id="content">
+    <h1>${(movie.title)!} 海报</h1>
+    <div class="left">
+        <@pc.enum lst=page.items cls='pict-m' />
+        <br class="clear"/>
+        <@b.pagination page=page url=base+ '/' + redirect + '_' cls='pagination'/>
+    </div>
+    <div class="righ">
+        <@mv.view movie=movie title=true cls='movie'/>
+        <br class="clear"/>
+        <@mv.gallery lst=movies cls='gallery'><h2>随机...</h2></@>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

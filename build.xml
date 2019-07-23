@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="vms" default="default" basedir=".">
+    <property name="name"      value="tvlian"/>
+    <property name="proName"   value="jimmy"/>
+    <property name="copyright" value="gaozou.org"/>
+
+    <property name="dir.dev" value="../../../develop"/>
+    <property name="dir.pro" value="../../../project"/>
+
+    <property name="dir.out" value="${dir.pro}/${proName}/out/production/${name}"/>
+    <property name="dir.dst" value="${dir.dev}/dst/${proName}/"/>
+    <property name="dir.lib" value="${dir.dev}/lib/${proName}"/>
+    <property name="dir.app" value="${dir.dev}/app"/>
+
+    <property name="dir.src" value="src"/>
+    <property name="dir.web" value="web"/>
+
+    <property name="j2ee"          value="${dir.app}/j2ee"/>
+    <property name="kevin-utility" value="${dir.dev}/dst/kevin/kevin-utility.jar"/>
+    <property name="kevin-pinyin"  value="${dir.dev}/dst/kevin/kevin-pinyin.jar"/>
+    <property name="kevin-cache"   value="${dir.dev}/dst/kevin/kevin-cache.jar"/>
+    <property name="kevin-rbac"    value="${dir.dev}/dst/kevin/kevin-rbac.jar"/>
+    <property name="jimmy-base"    value="${dir.dev}/dst/jimmy/jimmy-base.jar"/>
+
+    <property name="jsa" value="${dir.dev}/app/jsa/JSA-20071021.jar"/>
+    <property name="yui" value="${dir.dev}/app/yui/yuicompressor-2.3.6.jar"/>
+
+    <property name="file.jar" value="${dir.dst}/${proName}-${name}.jar"/>
+    <property name="file.war" value="${dir.dst}/${proName}-${name}.war"/>
+
+    <property name="file.css" value="${dir.web}/styles/${name}"/>
+    <property name="file.js"  value="${dir.web}/js/${name}"/>
+
+
+    <path id="classpath">
+        <pathelement location="${kevin-utility}"/>
+        <pathelement location="${kevin-pinyin}"/>
+        <pathelement location="${kevin-cache}"/>
+        <pathelement location="${kevin-rbac}"/>
+        <pathelement location="${jimmy-base}"/>
+        <pathelement location="${dir.out}"/>
+        <fileset dir="${j2ee}"    includes="**/*.jar"/>
+        <fileset dir="${dir.lib}" includes="**/*.jar"/>
+    </path>
+
+
+    <target name="default" depends="dist" description="default: build everything"/>
+
+    <taskdef resource="jst-task.properties" classpath="${jsa}" />
+    <target name="comweb">
+        <delete file="${file.js}-c.js"/>
+        <delete file="${file.css}-c.css"/>
+
+        <jscompress allInOneFileName="${file.js}-c.js" syntaxcompression="true" textcompression="true" compatible="true">
+            <fileset file="${file.js}-s.js"/>
+        </jscompress>
+        <java jar="${yui}" fork="true" failonerror="true">
+            <arg line="${file.css}-s.css" />
+            <arg line="-o ${file.css}-c.css" />
+        </java>
+    </target>
+
+
+    <target name="clean" description="Remove all outputs">
+        <delete dir="${dir.out}"/>
+        <delete file="${file.jar}"/>
+        <delete file="${file.war}"/>
+    </target>
+
+    <target name="compile" depends="clean" description="Generate outputs">
+        <mkdir dir="${dir.out}"/>
+        <javac srcdir="${dir.src}" destdir="${dir.out}" classpathref="classpath" debug="on" deprecation="on" fork="on" optimize="on"/>
+        <copy todir="${dir.out}" preservelastmodified="true">
+            <fileset dir="${dir.src}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="dist" depends="compile, comweb" description="Distribute project (jars etc)">
+        <jar destfile="${file.jar}" filesonly="false">
+            <manifest>
+                <attribute name="Created-By" value="${copyright}"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+            </manifest>
+            <fileset dir="${dir.out}"/>
+        </jar>
+
+        <war destfile="${file.war}" webxml="${dir.web}/WEB-INF/web.xml">
+            <manifest>
+                <attribute name="Created-By" value="${copyright}"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+            </manifest>
+            <fileset dir="${dir.web}" excludes="WEB-INF/web.xml, META-INF/context.xml, js/*-s.js, styles/*-s.css"/>
+            <lib file="${kevin-pinyin}"/>
+            <lib file="${kevin-cache}"/>
+            <lib file="${kevin-rbac}"/>
+            <lib file="${kevin-utility}"/>
+            <lib file="${jimmy-base}"/>
+            <lib file="${file.jar}"/>
+            <lib dir="${dir.lib}"/>
+        </war>
+    </target>
+</project>

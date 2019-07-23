@@ -1,0 +1,8 @@
+<#import "/WEB-INF/component/options.cm"  as op />
+<#import "/WEB-INF/component/port.cm"     as pt />
+<br class="clear"/>
+<div id="footer">
+    <@op.copyright options=options cls='copyright'/>
+    <@pt.ls lst=abouts cls='about' />
+</div>
+<br class="clear"/>

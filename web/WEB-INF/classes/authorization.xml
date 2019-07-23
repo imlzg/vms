@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<authz>
+    <privileges>
+
+        <privilege name="addmovie"        action="/addmovie"/>
+        <privilege name="savemovie"       action="/savemovie"/>
+        <privilege name="savedouban"      action="/savedouban"/>
+        <privilege name="batchdouban"     action="/batchdouban"/>
+        <privilege name="editmovie"       action="/editmovie"/>
+        <privilege name="saveedit"        action="/saveedit"/>
+        <privilege name="saveeditdouban"  action="/saveeditdouban"/>
+        <privilege name="deletemovie"     action="/deletemovie"/>
+        <privilege name="makeposter"      action="/makeposter"/>
+        <privilege name="recmovie"        action="/recmovie"/>
+        <privilege name="unrecmovie"      action="/unrecmovie"/>
+
+        <privilege name="addsource"     action="/addsource"/>
+        <privilege name="savesource"    action="/savesource"/>
+        <privilege name="editsource"    action="/editsource"/>
+        <privilege name="persistsource" action="/persistsource"/>
+        <privilege name="deletesource"  action="/deletesource"/>
+
+        <privilege name="addplot"     action="/addplot"/>
+        <privilege name="saveplot"    action="/saveplot"/>
+        <privilege name="editplot"    action="/editplot"/>
+        <privilege name="persistplot" action="/persistplot"/>
+        <privilege name="deleteplot"  action="/deleteplot"/>
+
+        <privilege name="addpict"       action="/addpict"/>
+        <privilege name="fancypict"     action="/fancypict"/>
+        <privilege name="fetchpicts"    action="/fetchpicts"/>
+        <privilege name="uploadpicts"   action="/uploadpicts"/>
+        <privilege name="batchsinapict" action="/batchsinapict"/>
+        <privilege name="editpict"      action="/editpict"/>
+        <privilege name="persistpict"   action="/persistpict"/>
+        <privilege name="deletepict"    action="/deletepict"/>
+
+        <privilege name="addtopic"     action="/addtopic"/>
+        <privilege name="savetopic"    action="/savetopic"/>
+        <privilege name="edittopic"    action="/edittopic"/>
+        <privilege name="persisttopic" action="/persisttopic"/>
+        <privilege name="deletetopic"  action="/deletetopic"/>
+
+        <privilege name="savereply"    action="/savereply"/>
+        <privilege name="deletereply"  action="/deletereply"/>
+
+        <privilege name="savetag"      action="/savetag"/>
+
+        <privilege name="collect"        action="/collect"/>
+        <privilege name="deletecollect"  action="/deletecollect"/>
+
+        <privilege name="vote"           action="/vote"/>
+
+
+        <privilege name="addstar"     action="/addstar"/>
+        <privilege name="savestar"    action="/savestar"/>
+        <privilege name="batchqqstar" action="/batchqqstar"/>
+        <privilege name="editstar"    action="/editstar"/>
+        <privilege name="persiststar" action="/persiststar"/>
+        <privilege name="deletestar"  action="/deletestar"/>
+        <privilege name="makephoto"   action="/makephoto"/>
+        <privilege name="recstar"     action="/recstar"/>
+        <privilege name="unrecstar"   action="/unrecstar"/>
+
+        <privilege name="addphoto"       action="/addphoto"/>
+        <privilege name="fancyphoto"     action="/fancyphoto"/>
+        <privilege name="fetchphotos"    action="/fetchphotos"/>
+        <privilege name="uploadphotos"   action="/uploadphotos"/>
+        <privilege name="batchsinaphoto" action="/batchsinaphoto"/>
+        <privilege name="batchqqphoto"   action="/batchqqphoto"/>
+        <privilege name="editphoto"      action="/editphoto"/>
+        <privilege name="persistphoto"   action="/persistphoto"/>
+        <privilege name="deletephoto"    action="/deletephoto"/>
+
+        <privilege name="addnews"     action="/addnews"/>
+        <privilege name="savenews"    action="/savenews"/>
+        <privilege name="editnews"    action="/editnews"/>
+        <privilege name="persistnews" action="/persistnews"/>
+        <privilege name="deletenews"  action="/deletenews"/>
+        <privilege name="recnews"     action="/recnews"/>
+        <privilege name="unrecnews"   action="/unrecnews"/>
+
+
+        <privilege name="manage" action="/manage/*" excludes="/manage/signup, /manage/login"/>
+    </privileges>
+
+    <roles>
+        <role name="user">
+
+            <right privilege="addmovie"/>
+            <right privilege="savemovie"/>
+            <right privilege="savedouban"/>
+
+            <right privilege="addsource"/>
+            <right privilege="savesource"/>
+
+            <right privilege="addplot"/>
+            <right privilege="saveplot"/>
+
+            <right privilege="addpict"/>
+            <right privilege="fancypict"/>
+            <right privilege="fetchpicts"/>
+            <right privilege="uploadpicts"/>
+
+            <right privilege="addtopic"/>
+            <right privilege="savetopic"/>
+            <right privilege="savereply"/>
+
+
+            <right privilege="savetag"/>
+
+            <right privilege="collect"/>
+
+            <right privilege="vote"/>
+
+
+            <right privilege="addstar"/>
+            <right privilege="savestar"/>
+
+            <right privilege="addphoto"/>
+            <right privilege="fancyphoto"/>
+            <right privilege="fetchphotos"/>
+            <right privilege="uploadphotos"/>
+
+            <right privilege="addnews"/>
+            <right privilege="savenews"/>
+
+
+        </role>
+
+        <role name="editor">
+            <right privilege="editmovie"/>
+            <right privilege="saveedit"/>
+            <right privilege="saveeditdouban"/>
+            <right privilege="makeposter"/>
+            <right privilege="recmovie"/>
+
+            <right privilege="editsource"/>
+            <right privilege="persistsource"/>
+            <right privilege="deletesource"/>
+
+            <right privilege="editplot"/>
+            <right privilege="persistplot"/>
+            <right privilege="deleteplot"/>
+
+            <right privilege="editpict"/>
+            <right privilege="persistpict"/>
+            <right privilege="deletepict"/>
+
+            <right privilege="edittopic"/>
+            <right privilege="persisttopic"/>
+            <right privilege="deletetopic"/>
+
+            <right privilege="deletereply"/>
+
+
+            <right privilege="editstar"/>
+            <right privilege="persiststar"/>
+            <right privilege="deletestar"/>
+            <right privilege="makephoto"/>
+            <right privilege="recstar"/>
+
+            <right privilege="editphoto"/>
+            <right privilege="persistphoto"/>
+            <right privilege="deletephoto"/>
+
+            <right privilege="editnews"/>
+            <right privilege="persistnews"/>
+            <right privilege="deletenews"/>
+            <right privilege="recnews"/>
+
+
+        </role>
+
+        <role name="admin">
+            <right privilege="*"/>
+        </role>
+
+    </roles>
+</authz>

@@ -1,0 +1,29 @@
+<#import "/WEB-INF/component/photo.cm"  as ph />
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(star.name)!'人物'} 照片</title>
+    <meta name="keywords" content="${(star.name)!'人物'} 照片" />
+    <meta name="description" content="${(star.name)!'人物'} 照片" />
+</head>
+<body>
+<div id="content">
+    <h1>${(star.name)!}照片</h1>
+    <div class="left">
+        <@ph.enum lst=page.items cls='photo-m' />
+        <br class="clear"/>
+        <@b.pagination page=page url=base+ '/' + redirect + '_' cls='pagination'/>
+    </div>
+    <div class="righ">
+        <@st.view star=star cls='star'/>
+        <br class="clear"/>
+        <br />
+        <@mv.gallery lst=movies cls='gallery'><h2>随机...</h2></@>
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

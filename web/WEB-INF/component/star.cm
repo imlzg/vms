@@ -1,0 +1,248 @@
+<#macro search cls=''>
+    <div class="${cls}">
+        <@b.form id="search-star" action="${base}/starsearch">
+            <@b.text id="q" name="q" value="" size="16"/>
+            <@b.submit value="搜明星" class="button"/>
+        </@>
+    </div>
+</#macro>
+
+<#macro view star={} title=false cls=''>
+    <#if (star?has_content)>
+    <dl class="${cls}">
+        <#if (title)>
+        <@b.test c=(star.name)><dt><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}">${(star.name)!}</a></dt></@b.test>
+        </#if>
+        <@b.test c=star.image><dd class="pic"><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}"><img src="${picURL(star, 'medium')}" alt="${(star.name)!} ${(star.english)!}" /></a></dd></@>
+        <dd class="info">
+            <@b.test c=star.name><h6>中文名：${star.name}</h6></@>
+            <@b.test c=star.english>英文名：${star.english}<br /></@>
+            <@b.test c=star.autonym>原名：${star.autonym}<br /></@>
+            <@b.test c=star.nick>昵称：${star.nick}<br /></@>
+            <@b.test c=star.aka>又称：${star.aka}<br /></@>
+            <@b.test c=star.birthday>生日：${star.birthday}<br /></@>
+            <@b.test c=star.birthplace>出生地：${star.birthplace}<br /></@>
+            <@b.test c=star.deadday>卒于：${star.deadday}<br /></@>
+            <@b.test c=star.deadplace>卒于地：${star.deadplace}<br /></@>
+            <@b.test c=star.address>住址：${star.address}<br /></@>
+            <@b.test c=star.nation>国籍：${star.nation}<br /></@>
+            <@b.test c=star.nativeplace>籍贯：${star.nativeplace}<br /></@>
+            <@b.test c=star.zodiac>生肖：${star.zodiac}<br /></@>
+            <@b.test c=star.astro>星座：${star.astro}<br /></@>
+            <@b.test c=star.blood>血型：${star.blood}<br /></@>
+            <@b.test c=star.height>身高：${star.height}<br /></@>
+            <@b.test c=star.weight>体重：${star.weight}<br /></@>
+            <@b.test c=star.education>学历：${star.education}<br /></@>
+            <@b.test c=star.school>院校：${star.school}<br /></@>
+            <@b.test c=star.major>专业：${star.major}<br /></@>
+            <@b.test c=star.job>职业：${star.job}<br /></@>
+            <@b.test c=star.hobby>爱好：${star.hobby}<br /></@>
+            <@b.test c=star.represent>代表作：${star.represent}<br /></@>
+            <@b.test c=star.family>家庭：${star.family}<br /></@>
+        </dd>
+        <dd>> <a href="${base}/star/${(star.id)!}_detail">详细...</a></dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro detail star={} cls=''>
+    <#if (star?has_content)>
+    <dl class="${cls}">
+        <@b.test c=star.image><dd class="pic"><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}"><img src="${picURL(star, 'medium')}" alt="${(star.name)!} ${(star.english)!}" /></a></dd></@>
+        <dd class="info">
+            <@b.test c=star.name><h6>中文名：${star.name}</h6></@>
+            <@b.test c=star.english>英文名：${star.english}<br /></@>
+            <@b.test c=star.autonym>原名：${star.autonym}<br /></@>
+            <@b.test c=star.nick>昵称：${star.nick}<br /></@>
+            <@b.test c=star.aka>又称：${star.aka}<br /></@>
+            <@b.test c=star.birthday>生日：${star.birthday}<br /></@>
+            <@b.test c=star.birthplace>出生地：${star.birthplace}<br /></@>
+            <@b.test c=star.deadday>卒于：${star.deadday}<br /></@>
+            <@b.test c=star.deadplace>卒于地：${star.deadplace}<br /></@>
+            <@b.test c=star.address>住址：${star.address}<br /></@>
+            <@b.test c=star.nation>国籍：${star.nation}<br /></@>
+            <@b.test c=star.nativeplace>籍贯：${star.nativeplace}<br /></@>
+            <@b.test c=star.zodiac>生肖：${star.zodiac}<br /></@>
+            <@b.test c=star.astro>星座：${star.astro}<br /></@>
+            <@b.test c=star.blood>血型：${star.blood}<br /></@>
+            <@b.test c=star.height>身高：${star.height}<br /></@>
+            <@b.test c=star.weight>体重：${star.weight}<br /></@>
+            <@b.test c=star.education>学历：${star.education}<br /></@>
+            <@b.test c=star.school>院校：${star.school}<br /></@>
+            <@b.test c=star.major>专业：${star.major}<br /></@>
+            <@b.test c=star.job>职业：${star.job}<br /></@>
+            <@b.test c=star.hobby>职业：${star.hobby}<br /></@>
+            <@b.test c=star.hobby>爱好：${star.hobby}<br /></@>
+            <@b.test c=star.represent>代表作：${star.represent}<br /></@>
+            <@b.test c=star.family>家庭：${star.family}<br /></@>
+        </dd>
+        <dd class="detail">${b.htmlFormat(star.description)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <dl class="${cls}">
+        <dt><#nested></dt>
+        <#list lst as star>
+        <dd><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}">${(star.name)!} ${(star.english)!}</a></dd>
+        </#list>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro gallery lst=[] size='small' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as star>
+    <dl class="${cls}">
+        <dt><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}"><img src="${picURL(star, size)}" alt="${(star.name)!} ${(star.english)!}" /></a></dt>
+        <dd><a href="${base}/star/${(star.id)!}" title="${(star.name)!} ${(star.english)!}">${(star.name)!} ${(star.english)!}</a></dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+
+<#macro add cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.actionErrs/>
+    <@b.actionMsgs/>
+    <@b.form action="${base}/savestar" method="post" valids=['star.name']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <li><label for="star.name">中文名:</label><@b.text id="star.name" name="star.name" size="48"/> </li>
+        <li><label for="star.english">英文名:</label><@b.text id="star.english" name="star.english" size="48"/> </li>
+        <li><label for="star.autonym">原名:</label><@b.text id="star.autonym" name="star.autonym" size="48"/> </li>
+        <li><label for="star.nick">昵称:</label><@b.text id="star.nick" name="star.nick" size="48"/> </li>
+        <li>
+        <label for="star.aka">又称:</label>
+        <span style="display:block;"><@b.text id="star.aka" name="akas[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li><label for="star.birthday">生日:</label><@b.text id="star.birthday" name="star.birthday" size="48"/> </li>
+        <li><label for="star.birthplace">出生地:</label><@b.text id="star.birthplace" name="star.birthplace" size="48"/> </li>
+        <li><label for="star.deadday">卒于:</label><@b.text id="star.deadday" name="star.deadday" size="48"/> </li>
+        <li><label for="star.deadplace">卒于地:</label><@b.text id="star.deadplace" name="star.deadplace" size="48"/> </li>
+        <li><label for="star.address">住址:</label><@b.text id="star.address" name="star.address" size="48"/> </li>
+        <li><label for="star.nation">国籍:</label><@b.text id="star.nation" name="star.nation" size="48"/> </li>
+        <li><label for="star.nativeplace">籍贯:</label><@b.text id="star.nativeplace" name="star.nativeplace" size="48"/> </li>
+        <li><label for="star.zodiac">生肖:</label><@b.text id="star.zodiac" name="star.zodiac" size="48"/> </li>
+        <li><label for="star.astro">星座:</label><@b.text id="star.astro" name="star.astro" size="48"/> </li>
+        <li><label for="star.blood">血型:</label><@b.text id="star.blood" name="star.blood" size="48"/> </li>
+        <li><label for="star.height">身高:</label><@b.text id="star.height" name="star.height" size="48"/> </li>
+        <li><label for="star.weight">体重:</label><@b.text id="star.weight" name="star.weight" size="48"/> </li>
+        <li><label for="star.education">学历:</label><@b.text id="star.education" name="star.education" size="48"/> </li>
+        <li><label for="star.school">院校:</label><@b.text id="star.school" name="star.school" size="48"/> </li>
+        <li><label for="star.major">专业:</label><@b.text id="star.major" name="star.major" size="48"/> </li>
+        <li><label for="star.job">职业:</label><@b.text id="star.job" name="star.job" size="48"/> </li>
+        <li><label for="star.hobby">爱好:</label><@b.text id="star.hobby" name="star.hobby" size="48"/> </li>
+        <li><label for="star.represent">代表作:</label><@b.text id="star.represent" name="star.represent" size="48"/> </li>
+        <li><label for="star.family">家庭:</label><@b.text id="star.family" name="star.family" size="48"/> </li>
+        <li><label for="star.description">介绍: </label><@b.textarea id="star.description" name="star.description" cols="50" rows="10"/> </li>
+        <li><@b.input type="submit" value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+<#macro batchqq cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/batchqqstar" method="post" valids=['beg']>
+        <@b.input type="hidden" name="redirect" value="${redirect!}"/>
+        <li><label>begin id:</label><@b.text name="beg"/></li>
+        <li><label>num:</label><@b.text name="num"/></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro edit star={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/persiststar" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="star.id" value="${(star.id)!}"/>
+        <li><label for="star.name">中文名:</label><@b.text id="star.name" name="star.name" value="${(star.name)!}" size="48"/> </li>
+        <li><label for="star.english">英文名:</label><@b.text id="star.english" name="star.english" value="${(star.english)!}" size="48"/> </li>
+        <li><label for="star.autonym">原名:</label><@b.text id="star.autonym" name="star.autonym" value="${(star.autonym)!}" size="48"/> </li>
+        <li><label for="star.nick">昵称:</label><@b.text id="star.nick" name="star.nick" value="${(star.nick)!}" size="48"/> </li>
+        <li>
+        <label for="star.aka">又称:</label>
+        <#assign akas = ((star.aka)!'')?split('/') >
+        <#list akas as aka>
+        <span style="display:block;"><@b.text id="star.aka" name="akas[${aka_index}]" value="${(aka?trim)!}" size="48"/><span class="del-this" title="del">-</span><#if (aka_index == akas?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li><label for="star.birthday">生日:</label><@b.text id="star.birthday" name="star.birthday" value="${(star.birthday)!}" size="48"/> </li>
+        <li><label for="star.birthplace">出生地:</label><@b.text id="star.birthplace" name="star.birthplace" value="${(star.birthplace)!}" size="48"/> </li>
+        <li><label for="star.deadday">卒于:</label><@b.text id="star.deadday" name="star.deadday" value="${(star.deadday)!}" size="48"/> </li>
+        <li><label for="star.deadplace">卒于地:</label><@b.text id="star.deadplace" name="star.deadplace" value="${(star.deadplace)!}" size="48"/> </li>
+        <li><label for="star.address">住址:</label><@b.text id="star.address" name="star.address" value="${(star.address)!}" size="48"/> </li>
+        <li><label for="star.nation">国籍:</label><@b.text id="star.nation" name="star.nation" value="${(star.nation)!}" size="48"/> </li>
+        <li><label for="star.nativeplace">籍贯:</label><@b.text id="star.nativeplace" name="star.nativeplace" value="${(star.nativeplace)!}" size="48"/> </li>
+        <li><label for="star.zodiac">生肖:</label><@b.text id="star.zodiac" name="star.zodiac" value="${(star.zodiac)!}" size="48"/> </li>
+        <li><label for="star.astro">星座:</label><@b.text id="star.astro" name="star.astro" value="${(star.astro)!}" size="48"/> </li>
+        <li><label for="star.blood">血型:</label><@b.text id="star.blood" name="star.blood" value="${(star.blood)!}" size="48"/> </li>
+        <li><label for="star.height">身高:</label><@b.text id="star.height" name="star.height" value="${(star.height)!}" size="48"/> </li>
+        <li><label for="star.weight">体重:</label><@b.text id="star.weight" name="star.weight" value="${(star.weight)!}" size="48"/> </li>
+        <li><label for="star.education">学历:</label><@b.text id="star.education" name="star.education" value="${(star.education)!}" size="48"/> </li>
+        <li><label for="star.school">院校:</label><@b.text id="star.school" name="star.school" value="${(star.school)!}" size="48"/> </li>
+        <li><label for="star.major">专业:</label><@b.text id="star.major" name="star.major" value="${(star.major)!}" size="48"/> </li>
+        <li><label for="star.job">职业:</label><@b.text id="star.job" name="star.job" value="${(star.job)!}" size="48"/> </li>
+        <li><label for="star.hobby">爱好:</label><@b.text id="star.hobby" name="star.hobby" value="${(star.hobby)!}" size="48"/> </li>
+        <li><label for="star.represent">代表作:</label><@b.text id="star.represent" name="star.represent" value="${(star.represent)!}" size="48"/> </li>
+        <li><label for="star.family">家庭:</label><@b.text id="star.family" name="star.family" value="${(star.family)!}" size="48"/> </li>
+        <li><label for="star.description">介绍: </label><@b.textarea id="star.description" name="star.description" cols="50" rows="10">${(star.description)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro index cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/indexstar" method="post">
+        <li>
+        <label>begId:</label><@b.text name="begId"/>
+        <label>endId:</label><@b.text name="endId"/>
+        <@b.submit value="submit" class="button"/>
+        </li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro manage star={} cls=''>
+    <@b.authz act='/editstar'><a href="${base}/editstar/${star.id}">编辑</a></@>
+    <@b.authz act='/deletestar'><a href="${base}/deletestar/${star.id}" onclick="return confirmDelete();">删除</a></@>
+    <#if (star.rec)!false>
+    <@b.authz act='/unrecstar'><a href="${base}/unrecstar/${star.id}" onclick="return confirmUnrec();">取消推荐</a></@>
+    <#else>  
+    <@b.authz act='/recstar'><a href="${base}/recstar/${star.id}" onclick="return confirmRec();">推荐</a></@>
+    </#if>
+</#macro>
+
+
+
+<#function picURL star={} size='small'>
+    <#assign url = (options.photoUrl)!/>
+    <#if ! (url?ends_with('/'))>
+        <#assign url = url + '/'/>
+    </#if>
+    <#switch size>
+        <#case 'small'>
+            <#return url + 'spic/' + (star.image)!/>
+            <#break>
+        <#case 'medium'>
+            <#return url + 'mpic/' + (star.image)!/>
+            <#break>
+        <#case 'large'>
+            <#return url + 'lpic/' + (star.image)!/>
+            <#break>
+        <#case 'original'>
+            <#return url + 'opic/' + (star.image)!/>
+            <#break>
+        <#default>
+    </#switch>
+    <#return url + 'spic/' + (star.image)!/>
+</#function>

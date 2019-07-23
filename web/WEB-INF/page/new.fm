@@ -1,0 +1,21 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>新加</title>
+    <meta name="keywords" content="新加${(category.name)!}" />
+    <meta name="description" content="新加${(category.name)!},tvlian.com" />
+</head>
+<body>
+<div id="content">
+    <h1>新加${(category.name)!}</h1>
+    <div class="left">
+        <@mv.pic lst=newz cls='pic' />
+    </div>
+    <div class="righ">
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

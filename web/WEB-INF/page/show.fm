@@ -1,0 +1,16 @@
+<#import "/WEB-INF/component/category.cm" as ct />
+<#import "/WEB-INF/component/source.cm"   as sc />
+<html>
+<head>
+    <title>${(source.movie.title)!}</title>
+</head>
+
+<body>
+<div id="show-main">
+    <@sc.show key=key/>
+</div>
+<div id="show-bottom">
+    <@ct.nav lst=categories cls=''/><span style="float:right; color:red; font-weight:bold;">tvlian.com</span>
+</div>
+</body>
+</html>

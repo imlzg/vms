@@ -1,0 +1,568 @@
+<#import "/WEB-INF/component/user.cm" as us />
+
+
+<#macro pic lst=[] size='small' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+    <#list lst as movie>
+        <li><a href="${viewURL(movie)}" title="${makeTitle(movie)}"><img src="${picURL(movie, size)}" alt="${makeTitle(movie)}"/></a></li>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro gallery lst=[] size='small' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as movie>
+    <dl class="${cls}">
+        <dt><a href="${viewURL(movie)}" title="${makeTitle(movie)}"><img src="${picURL(movie, size)}" alt="${makeTitle(movie)}"/></a></dt>
+        <dd><a href="${viewURL(movie)}" title="${makeTitle(movie)}">${makeName(movie)}</a></dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro popu lst=[] size='small' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as movie>
+    <dl class="${cls}">
+        <dt><a href="${viewURL(movie)}">${makeTitle(movie)}<@b.test c=movie.aka> / ${movie.aka}</@></a></dt>
+        <dd class="pic">
+            <#if (movie.image)?has_content>
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}"><img src="${picURL(movie, size)}" alt="${makeTitle(movie)}"/></a>
+            </#if>
+        </dd>
+        <dd class="des">
+        <@b.test c=movie.date>${movie.date}</@>
+        <@b.test c=movie.country> / ${movie.country}</@>
+        <@b.test c=movie.cast> / ${movie.cast}</@>
+        <@b.test c=movie.director> / ${movie.director}</@>
+        <@b.test c=movie.writer> / ${movie.writer}</@>
+        <@b.test c=movie.company> / ${movie.company}</@>
+        <@b.test c=movie.site> / ${movie.site}</@>
+        <@b.test c=movie.lang> / ${movie.lang}</@>
+        </dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro exhi lst=[] size='medium' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <div class="${cls}">
+    <#assign s = lst?size />
+    <#list lst as movie>
+    <#switch movie_index>
+        <#case 0>
+            <p class="pics">
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}"><img src="${picURL(movie, size)}" alt="${makeTitle(movie)}"/></a>
+            </p>
+            <#break>
+        <#case 1>
+            <ul class="item">
+            <li class="head">•
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}">
+            ${makeName(movie)}<#t>
+            <#if (movie.cast)?has_content>
+                <#if (movie.cast?index_of('/') == -1)> / ${movie.cast}</#if><#t>
+                <#if (movie.cast?index_of('/') != -1)> / ${movie.cast?substring(0, movie.cast?index_of('/'))}</#if><#t>
+            </#if>
+            <#if (movie.director)?has_content>
+                <#if (movie.director?index_of('/') == -1)> / ${movie.director}</#if><#t>
+                <#if (movie.director?index_of('/') != -1)> / ${movie.director?substring(0, movie.director?index_of('/'))}</#if><#t>
+            </#if>
+            </a>
+            </li>
+            <#break>
+        <#case s>
+            <li class="body">•
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}">
+            ${makeName(movie)}<#t>
+            <#if (movie.cast)?has_content>
+                <#if (movie.cast?index_of('/') == -1)> / ${movie.cast}</#if><#t>
+                <#if (movie.cast?index_of('/') != -1)> / ${movie.cast?substring(0, movie.cast?index_of('/'))}</#if><#t>
+            </#if>
+            <#if (movie.director)?has_content>
+                <#if (movie.director?index_of('/') == -1)> / ${movie.director}</#if><#t>
+                <#if (movie.director?index_of('/') != -1)> / ${movie.director?substring(0, movie.director?index_of('/'))}</#if><#t>
+            </#if>
+            </a>
+            </li>
+            </ul>
+            <#break>
+        <#default>
+            <li class="body">• 
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}">
+            ${makeName(movie)}<#t>
+            <#if (movie.cast)?has_content>
+                <#if (movie.cast?index_of('/') == -1)> / ${movie.cast}</#if><#t>
+                <#if (movie.cast?index_of('/') != -1)> / ${movie.cast?substring(0, movie.cast?index_of('/'))}</#if><#t>
+            </#if>
+            <#if (movie.director)?has_content>
+                <#if (movie.director?index_of('/') == -1)> / ${movie.director}</#if><#t>
+                <#if (movie.director?index_of('/') != -1)> / ${movie.director?substring(0, movie.director?index_of('/'))}</#if><#t>
+            </#if>
+            </a>
+            </li>
+    </#switch>
+    </#list>
+    </div>
+    </#if>
+</#macro>
+
+<#macro enum type='' lst=[] cls=''>
+    <#if (lst?has_content)>
+    <dl class="${cls}">
+        <dt><#nested></dt>
+        <#list lst as movie>
+        <dd>
+            <a href="${viewURL(movie)}" title="${makeTitle(movie)}">${makeName(movie)}</a>
+            <#switch type>
+                <#case 'new'>
+                    <span class="front-sum">${b.date(movie.editTime, 'dd')}日</span>
+                    <#break>
+                <#case 'eps'>
+                    <span class="front-sum"><#assign eps = (movie.episodes)!?size/><#if (eps > 0)>${eps}集</#if></span>
+                    <#break>
+                <#case 'pub'>
+                    <span class="front-sum"><#if (movie.date)??>${movie.date}</#if></span>
+                    <#break>
+                <#case 'hit'>
+                    <span class="front-sum"><#if (movie.hit)??>${movie.hit}次</#if></span>
+                    <#break>
+                <#case 'index'>
+                    <#if (b.now() - movie.editTime <= 1 * 7 * 24 * 60 * 60 * 1000)>
+                        <#assign lit = (movie.intents?last.type)!0/>
+                        <span class="new">
+                        <#switch lit>
+                            <#case 5>
+                                New<#t>
+                                <#break>
+                            <#case 6>
+                                New Link<#t>
+                                <#break>
+                            <#case 7>
+                                New Info<#t>
+                                <#break>
+                            <#default>
+                        </#switch>
+                        </span><#t>
+                    </#if>
+
+                    <span class="front-sum">${(movie.date)!}</span><#t>
+                    <#break>
+                <#default>
+
+            </#switch>
+        </dd>
+        </#list>
+    </dl>
+    </#if>
+</#macro>
+
+
+<#macro lib lst=[] cls=''>
+    <div class="${cls}">
+    <p><#nested></p>
+    <#if (lst?has_content)>
+    <ul>
+        <#list lst as movie>
+        <li>${movie_index + 1}. <a href="${viewURL(movie)}" title="${makeTitle(movie)}">${makeName(movie)}</a></li>
+        </#list>
+    </ul>
+    </#if>
+    </div>
+</#macro>
+
+
+<#macro view movie={} title=false cls=''>
+    <#if (movie?has_content)>
+    <dl class="${cls}">
+        <#if (title)>
+        <@b.test c=(movie.title)><dt><a href="${viewURL(movie)}">${movie.title}</a></dt></@b.test>
+        </#if>
+        <@b.test c=movie.image><dd class="pic"><a href="${viewURL(movie)}"><img src="${picURL(movie, 'medium')}" alt="${makeTitle(movie)}" title="点击看大图"/></a></dd></@>
+        <dd class="info">
+            <@b.test c=movie.chinese><h6>中文名：${movie.chinese}</h6></@>
+            <@b.test c=movie.director>导演：${makeLink(movie.director, base + '/director')}<br /></@>
+            <@b.test c=movie.writer>编剧：${makeLink(movie.writer, base + '/writer')}<br /></@>
+            <@b.test c=movie.cast>主演：${makeLink(movie.cast, base + '/cast')}<br /></@>
+            <@b.test c=movie.lang>语言：${movie.lang}<br /></@>
+            <@b.test c=movie.country>地区：${makeLink(movie.country, base + '/country')}<br /></@>
+            <@b.test c=movie.company>公司：${movie.company}<br /></@>
+            <@b.test c=movie.date>年度：<a href="${base}/date/${movie.date}">${movie.date}</a><br /></@>
+            <@b.test c=movie.aka>又名：${movie.aka}<br /></@>
+        </dd>
+        <dd class="href">
+        <@b.test c=movie.douban><a href="http://www.douban.com/subject/${(movie.douban)!}/reviews" target="_blank">看豆瓣影评</a></@>
+        <@b.test c=movie.imdb><a href="${movie.imdb}" target="_blank">imdb链接</a></@>
+        </dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro summary movie={} cls=''>
+    <@b.test c=movie.summary>
+    <#nested>
+    <div class="${cls}">
+        <#if (movie.summary)?has_content>
+        <#if (movie.summary?length > 500)>
+        ${(movie.summary)!?substring(0, 500)}... <a href="${base}/summary/${(movie.id)!}">详细 >></a><#t>
+        <#else>
+        ${(movie.summary)!?substring(0, movie.summary?length)}<#t>
+        </#if>
+        </#if>
+    </div>
+    </@>
+</#macro>
+
+
+
+
+<#macro addMenu cates=[] name='' cls=''>
+    <#nested>
+    <#if (b.hasAuthz(oper, {}, '/addmovie'))>
+    <ul clss="${cls}">
+        <#list cates as cate>
+        <li>&gt; <a href="${base}/${(cate.idc)!?url}_addmovie">${cate.name}</a></li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro add category={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/savemovie" method="post" valids=['movie.title']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="category.id" value="${(category.id)!}"/>
+        <li><label for="movie.title">标题:</label><@b.text id="movie.title" name="movie.title" size="48"/> </li>
+        <li><label for="movie.chinese">中文标题:</label><@b.text id="movie.chinese" name="movie.chinese" size="48"/> </li>
+        <li>
+        <label for="movie.aka">别名:</label>
+        <span style="display:block;"><@b.text id="movie.aka" name="akas[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li>
+        <label for="movie.cast">演员: </label>
+        <span style="display:block;"><@b.text id="movie.cast" name="casts[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li>
+        <label for="movie.writer">编剧: </label>
+        <span style="display:block;"><@b.text id="movie.writer" name="writers[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li>
+        <label for="movie.director">导演: </label>
+        <span style="display:block;"><@b.text id="movie.director" name="directors[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li>
+        <label for="movie.lang">语言: </label>
+        <span style="display:block;"><@b.text id="movie.lang" name="langs[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li><label for="movie.date">发行日期: </label><@b.text id="movie.date" name="movie.date" size="48"/> </li>
+        <li><label for="movie.size">剧集数: </label><@b.text id="movie.size" name="movie.size" size="48"/> </li>
+        <li><label for="movie.site">官方网站: </label><@b.text id="movie.site" name="movie.site" size="48"/> </li>
+        <li>
+        <label for="movie.country">地区: </label>
+        <span style="display:block;"><@b.text id="movie.country" name="countries[0]" size="48"/><span class="del-this" title="del">-</span><span class="add-more" title="add">+</span></span>
+        </li>
+        <li><label for="movie.company">公司: </label><@b.text id="movie.company" name="movie.company" size="48"/> </li>
+
+        <li><label for="movie.summary">简介: </label><@b.textarea id="movie.summary" name="movie.summary" cols="60" rows="10"/> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro fetchImdb category={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/saveimdb" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="category.id" value="${(category.id)!}"/>
+        <li><label>imdb编号:</label><@b.text name="imdb.imdbId"/> <@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+<#macro fetchDouban category={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/fetchdouban" method="post" valids=['movie.douban']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="category.id" value="${(category.id)!}"/>
+        <li><label>douban编号:</label><@b.text name="movie.douban"/> <@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+<#macro batchDouban category={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/batchdouban" method="post" valids=['doubanTag', 'beg']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="category.id" value="${(category.id)!}"/>
+        <li><label>tag:</label><@b.text name="doubanTag"/></li>
+        <li><label>begin:</label><@b.text name="beg"/></li>
+        <li><label>num:</label><@b.text name="num"/></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro editDouban movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/saveeditdouban" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li>
+        <label>douban编号:</label><@b.text name="movie.douban" value="${(movie.douban)!}" size="36"/>
+        <@b.submit value="submit" class="button"/>
+        </li>
+    </@>
+    </ul>
+</#macro>
+<#macro edit movie={} categories=[] cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/saveedit" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li>
+            <label for="category.id">目录: </label>
+            <select id="category.id" name="category.id" size="1">
+                <#if !movie?has_content>
+                <option selected="selected">select category</option>
+                </#if>
+
+                <#if (categories?has_content)>
+                <#list categories as category>
+                <#if ((movie.category.id)!0) == category.id>
+                <option value="${category.id}" selected="selected">${category.name}</option>
+                <#else>
+                <option value="${category.id}">${category.name}</option>
+                </#if>
+                </#list>
+                </#if>
+            </select>
+        </li>
+
+        <li><label for="movie.title">标题:</label><@b.text id="movie.title" name="movie.title" value="${(movie.title)!}" size="48"/> </li>
+        <li><label for="movie.chinese">中文标题:</label><@b.text id="movie.chinese" name="movie.chinese" value="${(movie.chinese)!}" size="48"/> </li>
+        <li>
+        <label for="movie.aka">别名:</label>
+        <#assign akas = ((movie.aka)!'')?split('/') >
+        <#list akas as aka>
+        <span style="display:block;"><@b.text id="movie.aka" name="akas[${aka_index}]" value="${(aka?trim)!}" size="48"/><span class="del-this" title="del">-</span><#if (aka_index == akas?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li>
+        <label for="movie.cast">演员: </label>
+        <#assign casts = ((movie.cast)!'')?split('/') >
+        <#list casts as cast>
+        <span style="display:block;"><@b.text id="movie.cast" name="casts[${cast_index}]" value="${(cast?trim)!}" size="48"/><span class="del-this" title="del">-</span><#if (cast_index == casts?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li>
+        <label for="movie.writer">编剧: </label>
+        <#assign writers = ((movie.writer)!'')?split('/') >
+        <#list writers as writer>
+        <span style="display:block;"><@b.text id="movie.writer" name="writers[${writer_index}]" value="${(writer?trim)!}" size="48"/><span class="del-this" title="del">-</span><#if (writer_index == writers?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li>
+        <label for="movie.director">导演: </label>
+        <#assign directors = ((movie.director)!'')?split('/') >
+        <#list directors as director>
+        <span style="display:block;"><@b.text id="movie.director" name="directors[${director_index}]" value="${(director?trim)!}" size="48"/><span class="del-this" title="del">-</span><#if (director_index == directors?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li>
+        <label for="movie.lang">语言: </label>
+        <#assign langs = ((movie.lang)!'')?split('/') >
+        <#list langs as lang>
+        <span style="display:block;"><@b.text id="movie.lang" name="langs[${lang_index}]" value="${(lang?trim)!}" size="28"/><span class="del-this" title="del">-</span><#if (lang_index == langs?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li><label for="movie.date">发行日期: </label><@b.text id="movie.date" name="movie.date" value="${(movie.date)!}" size="48"/> </li>
+        <li><label for="movie.size">剧集数: </label><@b.text id="movie.size" name="movie.size" value="${(movie.size)!}" size="48"/> </li>
+        <li><label for="movie.site">官方网站: </label><@b.text id="movie.site" name="movie.site" value="${(movie.site)!}" size="48"/> </li>
+        <li>
+        <label for="movie.country">地区: </label>
+        <#assign countries = ((movie.country)!'')?split('/') >
+        <#list countries as country>
+        <span style="display:block;"><@b.text id="movie.country" name="countries[${country_index}]" value="${(country?trim)!}" size="28"/><span class="del-this" title="del">-</span><#if (country_index == countries?size - 1)><span class="add-more" title="add">+</span></#if></span>
+        </#list>
+        </li>
+        <li><label for="movie.company">公司: </label><@b.text id="movie.company" name="movie.company" value="${(movie.company)!}" size="48"/> </li>
+        <li><label for="movie.douban">豆瓣编号: </label><@b.text id="movie.douban" name="movie.douban" value="${(movie.douban)!}" size="48"/> </li>
+        <li><label for="movie.imdb">IMDB: </label><@b.text id="movie.imdb" name="movie.imdb" value="${(movie.imdb)!}" size="48"/> </li>
+        <li><label for="movie.summary">简介: </label><@b.textarea id="movie.summary" name="movie.summary" cols="60" rows="10">${(movie.summary)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro genusAndRegion movie={} genera=[] regions=[] cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form id="movie-form" action="${base}/savegenusregion" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="category.id" value="${(movie.category.id)!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li>
+            <select name="genus.id" size="1">
+                <#if (genera?has_content)>
+                <#list genera as genus>
+                <#if ((movie.genus.id)!0) == genus.id>
+                <option value="${genus.id}" selected="selected">${genus.name}</option>
+                <#else>
+                <option value="${genus.id}">${genus.name}</option>
+                </#if>
+                </#list>
+                </#if>
+            </select>
+            <select name="region.id" size="1">
+                <#if (regions?has_content)>
+                <#list regions as region>
+                <#if ((movie.region.id)!0) == region.id>
+                <option value="${region.id}" selected="selected">${region.name}</option>
+                <#else>
+                <option value="${region.id}">${region.name}</option>
+                </#if>
+                </#list>
+                </#if>
+            </select>
+            <@b.submit id="submit" value="OK" class="button"/>
+        </li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro manage1 lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#list lst as movie>
+    <ul class="${cls}">
+        <li class="title">${movie.id} ${makeName(movie)}</li>
+        <li class="tool">
+        <a href="${base}/manage/source/in_${movie.id}">Videos</a> |
+        <a href="${base}/manage/movie/update_${movie.id}">Update</a> |
+        <a href="${base}/manage/movie/remove_${movie.id}">Remove</a> |
+        </li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro index cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/indexmovie" method="post">
+        <li>
+        <label>begId:</label><@b.text name="begId"/> - <label>endId:</label><@b.text name="endId"/>
+        <@b.submit value="submit" class="button"/>
+        </li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro manage movie={} cls=''>
+    <@b.authz act='/editmovie'><a href="${base}/editmovie/${movie.id}" class="btn3">编辑</a></@>
+    <@b.authz act='/deletemovie'><a href="${base}/deletemovie/${movie.id}" onclick="return confirmDelete();" class="btn3">删除</a></@>
+    <#if (movie.rec)!false>
+    <@b.authz act='/unrecmovie'><a href="${base}/unrecmovie/${movie.id}" onclick="return confirmUnrec();">取消推荐</a></@>
+    <#else>
+    <@b.authz act='/recmovie'><a href="${base}/recmovie/${movie.id}" onclick="return confirmRec();">推荐</a></@>
+    </#if>
+    <br class="clear"/>
+    <@b.authz act='/addsource'><a href="${base}/movie/${movie.id}_addsource" class="btn">添加资源</a></@>
+    <@b.authz act='/addplot'><a href="${base}/movie/${movie.id}_addplot" class="btn">添加剧情</a></@>
+    <@b.authz act='/addpict'><a href="${base}/movie/${movie.id}_addpict" class="btn">添加海报</a></@>
+</#macro>
+
+
+<#function makeName movie={}>
+    <#if (movie.chinese)?has_content>
+        <#return movie.chinese />
+    <#else>
+        <#return movie.title />
+    </#if>
+</#function>
+
+<#function makeTitle movie={}>
+    <#assign title = '' />
+    <#if (movie.chinese)?has_content>
+        <#assign title = movie.chinese />
+    </#if>
+    <#return title + ' ' + (movie.title)! />
+</#function>
+
+
+<#function viewURL movie={}>
+    <#return base + '/movie/' + ((movie.id)!)/>
+</#function>
+
+
+<#function picURL movie={} size='small'>
+    <#assign url = (options.picUrl)!/>
+    <#if ! (url?ends_with('/'))>
+        <#assign url = url + '/'/>
+    </#if>
+    <#switch size>
+        <#case 'small'>
+            <#return url + 'spic/' + (movie.image)!/>
+            <#break>
+        <#case 'medium'>
+            <#return url + 'mpic/' + (movie.image)!/>
+            <#break>
+        <#case 'large'>
+            <#return url + 'lpic/' + (movie.image)!/>
+            <#break>
+        <#case 'original'>
+            <#return url + 'opic/' + (movie.image)!/>
+            <#break>
+        <#default>
+    </#switch>
+    <#return url + 'spic/' + (movie.image)!/>
+</#function>
+
+
+<#function makeLink kw='' url='/'>
+    <#assign ss = '' />
+    <#assign vs = kw.split(' / ') />
+    <#assign sz = vs?size - 1 />
+    <#list vs as v>
+        <#assign ss = ss + '<a href="'+ url +'/'+ v +'">'+ v +'</a>' />
+        <#if (v_index != sz)>
+            <#assign ss = ss + ' / ' />
+        </#if>
+    </#list>
+    <#return ss />
+</#function>
+
+
+
+<!-- -->
+<!-- -->
+
+
+
+
+
+<#macro checkbox1 checked=false ext...>
+<input type="checkbox" <#if checked>checked="checked" </#if><@pairs ext=ext/>/>
+</#macro>
+
+
+
+<#macro bbc1 ext...>
+<#list ext?keys as k>
+<#if (ext[k]?has_content)>
+${k}="${(ext[k])?html}"
+</#if>
+</#list>
+</#macro>

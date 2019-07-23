@@ -1,0 +1,12 @@
+<#import "/WEB-INF/component/tag.cm" as tg />
+<html>
+<head>
+    <title>Tags</title>
+</head>
+<body>
+<div id="content">
+    <h1>Tags</h1>
+    <@tg.enum lst=tags/>
+</div>
+</body>
+</html>

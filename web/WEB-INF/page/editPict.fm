@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/pict.cm" as pc />
+<#import "/WEB-INF/component/hint.cm" as h />
+<html>
+<head>
+    <title>编辑“${(pict.title)!'海报'}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(pict.title)!'海报'}”</h1>
+    <div class="left">
+        <@pc.edit pict=pict cls="add-pict" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>Advert</title>
+</head>
+<body>
+<div id="content">
+    <h1>Advert</h1>
+    <@ad.form advert=advert cls=''/>
+    <@ad.manage lst=adverts cls=''/>
+</div>
+</body>
+</html>

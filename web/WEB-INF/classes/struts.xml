@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode"                        value="true" />
+    <constant name="struts.configuration.xml.reload"       value="false"/>
+    <constant name="struts.i18n.reload"                    value="false" />
+
+    <constant name="struts.objectFactory"                  value="spring"/>
+    <constant name="struts.objectFactory.spring.autoWire"  value="name"/>
+    <constant name="struts.i18n.encoding"                  value="UTF-8"/>
+    <constant name="struts.custom.i18n.resources"          value="globalMessages" />
+    <constant name="struts.multipart.parser"               value="jakarta"/>
+    <constant name="struts.multipart.saveDir"              value="/home/george/tmp/upload"/>
+    <!--<constant name="struts.multipart.saveDir"              value="/var/www/www.tvlian.com/tmp"/>-->
+    <constant name="struts.multipart.maxSize"              value="2097152"/>
+    <constant name="struts.serve.static"                   value="true" />
+    <constant name="struts.serve.static.browserCache"      value="false" />
+    <constant name="struts.action.extension"               value="action"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.locale"                         value="zh-cn" />
+    <constant name="struts.freemarker.templatesCache"      value="true" />
+    <constant name="struts.freemarker.manager.classname"   value="org.gaozou.jimmy.base.support.struts2.FreemarkerManager" />
+
+
+    <package name="vms" extends="jimmy">
+
+        <interceptors>
+
+            <interceptor-stack name="valiStack">
+                <interceptor-ref name="validation">
+                    <param name="validateAnnotatedMethodOnly">true</param>
+                </interceptor-ref>
+            </interceptor-stack>
+
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="messageStore">
+                    <param name="operationMode">STORE</param>
+                </interceptor-ref>
+                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="authorization"/>
+                <interceptor-ref name="valiStack"/>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">signUp,addMovie,addSource,addPict,addPhoto</param>
+                </interceptor-ref>
+            </interceptor-stack>
+
+            <interceptor-stack name="inputStack">
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="authorization"/>
+                <interceptor-ref name="valiStack"/>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">signUp,addMovie,addSource,addPict,addPhoto</param>
+                </interceptor-ref>
+               <interceptor-ref name="messageStore">
+                   <param name="operationMode">RETRIEVE</param>
+               </interceptor-ref>
+            </interceptor-stack>
+
+            <interceptor-stack name="uploadStack">
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="messageStore">
+                    <param name="operationMode">STORE</param>
+                </interceptor-ref>
+                <interceptor-ref name="fileUpload"/>
+                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="authorization"/>
+                <interceptor-ref name="valiStack"/>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">signUp,addMovie,addSource,addPict,addPhoto</param>
+                </interceptor-ref>
+            </interceptor-stack>
+
+        </interceptors>
+
+        <default-interceptor-ref name="defaultStack"/>
+
+
+        <global-results>
+            <result name="sqlException" type="redirect">/</result>
+            <result name="exception" type="redirect">/</result>
+            <result name="error">/WEB-INF/page/error.fm</result>
+
+            <result name="input" type="redirect">/</result>
+            <result name="login" type="redirect">/signup</result>
+        </global-results>
+
+
+
+<!--
+
+        <global-exception-mappings>
+            <exception-mapping exception="org.hibernate.PropertyAccessException" result="error"/>
+            <exception-mapping exception="org.springframework.orm.jpa.JpaSystemException" result="error"/>
+            <exception-mapping exception="org.gaozou.kevin.utility.SimpleException" result="error"/>
+            <exception-mapping exception="java.sql.SQLException" result="error"/>
+            <exception-mapping exception="javax.servlet.ServletException" result="error"/>
+            <exception-mapping exception="java.io.IOException" result="error"/>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+            <exception-mapping exception="java.lang.Throwable" result="error"/>
+        </global-exception-mappings>
+
+-->
+
+
+
+    </package>
+
+    <package name="vms-user" extends="vms">
+
+        <action name="home" class="portAction" method="home">
+            <result>/WEB-INF/page/home.fm</result>
+        </action>
+        <action name="people" class="portAction" method="people">
+            <result>/WEB-INF/page/people.fm</result>
+        </action>
+        <action name="tag" class="portAction" method="tag">
+            <result>/WEB-INF/page/tag.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="about" class="portAction" method="about">
+            <result>/WEB-INF/page/port.fm</result>
+        </action>
+
+        <action name="movies" class="movieAction" method="list">
+            <result>/WEB-INF/page/movies.fm</result>
+        </action>
+
+<!--
+        <action name="category" class="movieAction" method="category">
+            <result>/WEB-INF/page/category.fm</result>
+        </action>
+        <action name="genus" class="movieAction" method="genus">
+            <result>/WEB-INF/page/genus.fm</result>
+        </action>
+        <action name="region" class="movieAction" method="region">
+            <result>/WEB-INF/page/region.fm</result>
+        </action>
+        -->
+        <action name="library" class="movieAction" method="library">
+            <result>/WEB-INF/page/library.fm</result>
+        </action>
+
+        <action name="new" class="movieAction" method="newz">
+            <result>/WEB-INF/page/new.fm</result>
+        </action>
+        <action name="top" class="movieAction" method="tops">
+            <result>/WEB-INF/page/top.fm</result>
+        </action>
+
+
+        <action name="field" class="movieAction" method="field">
+            <result>/WEB-INF/page/field.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+
+
+        <action name="moviesearch" class="movieAction" method="search">
+            <result>/WEB-INF/page/movieSearch.fm</result>
+        </action>
+        <action name="movie" class="movieAction" method="view">
+            <result>/WEB-INF/page/movie.fm</result>
+        </action>
+        <action name="summary" class="movieAction" method="summary">
+            <result>/WEB-INF/page/summary.fm</result>
+        </action>
+
+
+        <action name="sitemaps" class="movieAction" method="sitemaps"/>
+        <action name="sitemap" class="movieAction" method="sitemap"/>
+        <action name="urllist" class="movieAction" method="urllist"/>
+
+        <action name="rsstops" class="movieAction" method="rssTops"/>
+        <action name="rssnewz" class="movieAction" method="rssNewz"/>
+
+        <action name="rsswants" class="movieAction" method="rssWants"/>
+        <action name="rssseens" class="movieAction" method="rssSeens"/>
+
+
+
+        <action name="profile" class="userAction" method="profile">
+            <result>/WEB-INF/page/profile.fm</result>
+        </action>
+        <action name="saveprofile" class="userAction" method="saveProfile">
+            <interceptor-ref name ="uploadStack" />
+            <result type="redirect">/profile/${user.name}</result>
+        </action>
+
+        <action name="signup" class="userAction" method="signUp">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/signUp.fm</result>
+        </action>
+        <action name="register" class="userAction" method="register">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">/signup</result>
+        </action>
+        <action name="login" class="userAction" method="login">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">/signup</result>
+        </action>
+        <action name="logout" class="userAction" method="logout">
+            <result type="redirect">${redirect}</result>
+        </action>
+
+
+<!--
+        <action name="vote" class="ratingAction" method="vote"/>
+        <action name="collect" class="collectAction" method="collect"/>
+        <action name="deletecollect" class="collectAction" method="delete">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="savetag" class="tagAction" method="save">
+            <result type="redirect">${referer}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+
+        <action name="collect1" class="intentAction" method="collect">
+            <result type="redirect">${referer}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+-->
+
+
+        <action name="addmovie" class="movieAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addMovie.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="savemovie" class="movieAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="fetchdouban" class="movieAction" method="fetchDouban">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchdouban" class="movieAction" method="batchDouban">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editmovie" class="movieAction" method="edit">
+            <result>/WEB-INF/page/editMovie.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="saveeditdouban" class="movieAction" method="saveEditDouban">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="saveedit" class="movieAction" method="saveEdit">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletemovie" class="movieAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+<!--
+        <action name="savegenusregion" class="movieAction" method="saveGenusRegion">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>-->
+        <action name="makeposter" class="movieAction" method="makePoster">
+            <result type="redirect">${referer}</result>
+        </action>
+
+<!--
+        <action name="sources" class="sourceAction" method="list">
+            <result>/WEB-INF/page/sources.fm</result>
+        </action>
+        <action name="source" class="sourceAction" method="view">
+            <result>/WEB-INF/page/source.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="addsource" class="sourceAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addSource.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="savesource" class="sourceAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editsource" class="sourceAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editSource.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistsource" class="sourceAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletesource" class="sourceAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+
+
+        <action name="show" class="sourceAction" method="show">
+            <result>/WEB-INF/page/show.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="go" class="sourceAction" method="go">
+            <result type="redirect">${go}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+
+
+        <action name="plots" class="plotAction" method="list">
+            <result>/WEB-INF/page/plots.fm</result>
+        </action>
+        <action name="plot" class="plotAction" method="view">
+            <result>/WEB-INF/page/plot.fm</result>
+        </action>
+        <action name="addplot" class="plotAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addPlot.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="saveplot" class="plotAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editplot" class="plotAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editPlot.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistplot" class="plotAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deleteplot" class="plotAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+
+
+        <action name="picts" class="pictAction" method="list">
+            <result>/WEB-INF/page/picts.fm</result>
+        </action>
+        <action name="pict" class="pictAction" method="view">
+            <result>/WEB-INF/page/pict.fm</result>
+        </action>
+        <action name="addpict" class="pictAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addPict.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="fancypict" class="pictAction" method="fancy">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="fetchpicts" class="pictAction" method="fetch">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="uploadpicts" class="pictAction" method="upload">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchsinapict" class="pictAction" method="batchSina">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editpict" class="pictAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editPict.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistpict" class="pictAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletepict" class="pictAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+-->
+<!--
+        <action name="topics" class="topicAction" method="list">
+            <result>/WEB-INF/page/topics.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="addtopic" class="topicAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addTopic.fm</result>
+        </action>
+        <action name="savetopic" class="topicAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="edittopic" class="topicAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editTopic.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persisttopic" class="topicAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletetopic" class="topicAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+
+        <action name="replies" class="replyAction" method="list">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/replies.fm</result>
+        </action>
+        <action name="savereply" class="replyAction" method="save">
+            <result type="redirect">${referer}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>-->
+<!--
+        <action name="editreply" class="replyAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editReply.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistreply" class="replyAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+
+        <action name="deletereply" class="replyAction" method="remove">
+            <result type="redirect">${referer}</result>
+        </action>
+-->
+
+
+        <action name="tags" class="tagAction" method="list">
+            <result>/WEB-INF/page/tags.fm</result>
+        </action>
+
+
+
+
+        <action name="starsearch" class="starAction" method="search">
+            <result>/WEB-INF/page/starSearch.fm</result>
+        </action>
+        <action name="stars" class="starAction" method="list">
+            <result>/WEB-INF/page/stars.fm</result>
+        </action>
+        <action name="star" class="starAction" method="view">
+            <result>/WEB-INF/page/star.fm</result>
+        </action>
+        <action name="stardetail" class="starAction" method="detail">
+            <result>/WEB-INF/page/starDetail.fm</result>
+        </action>
+        <action name="addstar" class="starAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addStar.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="savestar" class="starAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchqqstar" class="starAction" method="batchQQ">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editstar" class="starAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editStar.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persiststar" class="starAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletestar" class="starAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="makephoto" class="starAction" method="makePhoto">
+            <result type="redirect">${referer}</result>
+        </action>
+
+
+<!---->
+        <action name="recmovie" class="movieAction" method="recommend">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="unrecmovie" class="movieAction" method="unrecommend">
+            <result type="redirect">${referer}</result>
+        </action>
+
+        <action name="recstar" class="starAction" method="recommend">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="unrecstar" class="starAction" method="unrecommend">
+            <result type="redirect">${referer}</result>
+        </action>
+
+        <action name="recnews" class="newsAction" method="recommend">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="unrecnews" class="newsAction" method="unrecommend">
+            <result type="redirect">${referer}</result>
+        </action>
+<!--  -->
+
+<!--
+
+
+
+        <action name="photos" class="photoAction" method="list">
+            <result>/WEB-INF/page/photos.fm</result>
+        </action>
+        <action name="photo" class="photoAction" method="view">
+            <result>/WEB-INF/page/photo.fm</result>
+        </action>
+        <action name="addphoto" class="photoAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addPhoto.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="fancyphoto" class="photoAction" method="fancy">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="fetchphotos" class="photoAction" method="fetch">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="uploadphotos" class="photoAction" method="upload">
+            <interceptor-ref name="uploadStack" />
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchsinaphoto" class="photoAction" method="batchSina">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchqqphoto" class="photoAction" method="batchQQ">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editphoto" class="photoAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editPhoto.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistphoto" class="photoAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletephoto" class="photoAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+-->
+
+        <action name="newssearch" class="newsAction" method="search">
+            <result>/WEB-INF/page/newsSearch.fm</result>
+        </action>
+        <action name="newz" class="newsAction" method="list">
+            <result>/WEB-INF/page/newz.fm</result>
+        </action>
+        <action name="news" class="newsAction" method="view">
+            <result>/WEB-INF/page/news.fm</result>
+        </action>
+        <action name="addnews" class="newsAction" method="add">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/addNews.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="savenews" class="newsAction" method="save">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="editnews" class="newsAction" method="edit">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/editNews.fm</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="persistnews" class="newsAction" method="persist">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="deletenews" class="newsAction" method="remove">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="fetchsinanews" class="newsAction" method="fetchSina">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+        <action name="batchsinanews" class="newsAction" method="batchSina">
+            <result type="redirect">${redirect}</result>
+            <result type="redirect" name="input">${referer}</result>
+        </action>
+
+
+
+    </package>
+
+
+    <package name="vms-manage" extends="vms" namespace="/manage">
+
+
+        <global-results>
+            <result name="sqlException" type="redirect">/manage</result>
+            <result name="exception" type="redirect">/manage</result>
+            <result name="error">/WEB-INF/page/manage/error.fm</result>
+
+            <result name="input" type="redirect">/manage</result>
+        </global-results>
+
+
+
+<!---->
+        <action name="setup" class="portAction" method="setup">
+            <result>/WEB-INF/page/manage/setup.fm</result>
+        </action>
+        <action name="install" class="portAction" method="install">
+            <result type="redirect">/</result>
+        </action>
+        <action name="home" class="portAction" method="admin">
+            <result>/WEB-INF/page/manage/home.fm</result>
+        </action>
+
+
+
+
+        <action name="options" class="optionsAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/options.fm</result>
+        </action>
+        <action name="persistoptions" class="optionsAction" method="persist">
+            <result type="redirect">/manage/options</result>
+            <result type="redirect" name="input">/manage/options</result>
+        </action>
+
+
+        <action name="port" class="portAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/port.fm</result>
+        </action>
+        <action name="updateport" class="portAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/port.fm</result>
+        </action>
+        <action name="persistport" class="portAction" method="persist">
+            <result type="redirect">/manage/port</result>
+            <result type="redirect" name="input">/manage/port</result>
+        </action>
+        <action name="removeport" class="portAction" method="remove">
+            <result type="redirect">/manage/port</result>
+        </action>
+
+
+<!--
+
+        <action name="category" class="categoryAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/categories.fm</result>
+        </action>
+        <action name="persistcategory" class="categoryAction" method="persist">
+            <result type="redirect">/manage/category</result>
+            <result type="redirect" name="input">/manage/category</result>
+        </action>
+        <action name="removecategory" class="categoryAction" method="remove">
+            <result type="redirect">/manage/category</result>
+            <result type="redirect" name="input">/manage/category</result>
+        </action>
+
+        <action name="genus" class="genusAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/genera.fm</result>
+        </action>
+        <action name="persistgenus" class="genusAction" method="persist">
+            <result type="redirect">/manage/genus</result>
+            <result type="redirect" name="input">/manage/genus</result>
+        </action>
+        <action name="removegenus" class="genusAction" method="remove">
+            <result type="redirect">/manage/genus</result>
+            <result type="redirect" name="input">/manage/genus</result>
+        </action>
+
+        <action name="region" class="regionAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/regions.fm</result>
+        </action>
+        <action name="persistregion" class="regionAction" method="persist">
+            <result type="redirect">/manage/region</result>
+            <result type="redirect" name="input">/manage/region</result>
+        </action>
+        <action name="removeregion" class="regionAction" method="remove">
+            <result type="redirect">/manage/region</result>
+            <result type="redirect" name="input">/manage/region</result>
+        </action>
+
+-->
+
+
+
+        <action name="user" class="userAction" method="manage">
+            <result>/WEB-INF/page/manage/users.fm</result>
+        </action>
+        <action name="updateuser" class="userAction" method="update">
+            <result>/WEB-INF/page/manage/userForm.fm</result>
+        </action>
+        <action name="persistuser" class="userAction" method="persist">
+            <result type="redirect">${redirect}</result>
+        </action>
+        <action name="removeuser" class="userAction" method="remove">
+            <result type="redirect">${referer}</result>
+        </action>
+
+
+
+        <action name="advert" class="adAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/ad.fm</result>
+        </action>
+        <action name="updateadvert" class="adAction" method="manage">
+            <interceptor-ref name="inputStack" />
+            <result>/WEB-INF/page/manage/ad.fm</result>
+        </action>
+        <action name="persistadvert" class="adAction" method="persist">
+            <result type="redirect">/manage/advert</result>
+            <result type="redirect" name="input">/manage/advert</result>
+        </action>
+        <action name="removeadvert" class="adAction" method="remove">
+            <result type="redirect">/manage/advert</result>
+        </action>
+
+
+
+
+
+
+
+        <action name="index" class="portAction" method="index">
+            <result>/WEB-INF/page/manage/index.fm</result>
+        </action>
+        <action name="indexmovie" class="movieAction" method="index">
+            <result type="redirect">/manage/index</result>
+            <result type="redirect" name="input">/manage/index</result>
+        </action>
+        <action name="indexstar"  class="starAction"  method="index">
+            <result type="redirect">/manage/index</result>
+            <result type="redirect" name="input">/manage/index</result>
+        </action>
+        <action name="indexnews"  class="newsAction"  method="index">
+            <result type="redirect">/manage/index</result>
+            <result type="redirect" name="input">/manage/index</result>
+        </action>
+
+
+<!--
+        <action name="convPict" class="imageAction" method="convPict">
+            <result type="redirect">/manage/</result>
+        </action>
+        <action name="convPhoto" class="imageAction" method="convPhoto">
+            <result type="redirect">/manage/</result>
+        </action>
+
+        <action name="convIntent" class="intentAction" method="convert">
+            <result type="redirect">/manage/</result>
+        </action>-->
+
+    </package>
+
+</struts>

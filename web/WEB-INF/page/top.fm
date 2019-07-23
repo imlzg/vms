@@ -1,0 +1,21 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as bl />
+<html>
+<head>
+    <title>热门${(category.name)!}</title>
+    <meta name="keywords" content="热门${(category.name)!}" />
+    <meta name="description" content="热门${(category.name)!},tvlian.com" />
+</head>
+<body>
+<div id="content">
+    <h1>热门${(category.name)!}</h1>
+    <div class="left">
+        <@mv.pic lst=tops cls='pic' />
+    </div>
+    <div class="righ">
+
+    </div>
+    <div class="side"><@bl.enum lst=bills/></div>
+</div>
+</body>
+</html>

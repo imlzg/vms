@@ -1,0 +1,23 @@
+<#import "/WEB-INF/component/news.cm"   as nw />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(news.title)!}</title>
+    <meta name="keywords" content="${(news.title)!}" />
+    <meta name="description" content="${b.plainString(news.content, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(news.title)!}</h1>
+    <div class="left">
+        <@nw.display news=news cls='news'/>
+        <br class="clear"/>
+        <br />
+    </div>
+    <div class="righ">
+        <@nw.manage news=news/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

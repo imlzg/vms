@@ -1,0 +1,63 @@
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#list lst as advert>
+    <ul class="${cls}">
+        <li>${(advert.code)!}</li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+
+
+<#macro manage1 lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as advert>
+        <li>
+        ${(advert.name)!}
+        <a href="${base}/manage/advert/update_${advert.id}">Update</a>
+        <a href="${base}/manage/advert/remove_${advert.id}">Remove</a>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as advert>
+        <li>
+            <@b.form id="advert-manage" action="${base}/manage/advert/persist" method="post" valids=['advert.idc','advert.name']>
+            <@b.hidden name="advert.id" value="${(advert.id)!}"/>
+            <@b.text name="advert.idc" value="${(advert.idc)!}" size="7"/>
+            <@b.text name="advert.name" value="${(advert.name)!}" size="7"/>
+            <@b.text name="advert.seq" value="${(advert.seq)!}" size="3"/>
+            <@b.checkbox name="open" value="true" checked=(advert.open)!false/>
+            <@b.submit value="submit" class="button"/>
+            <a href="${base}/manage/advert/update_${(advert.id)!}">Update</a>
+            <a href="${base}/manage/advert/remove_${(advert.id)!}">Remove</a>
+            </@>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form advert={} cls=''>
+    <ul class="${cls}">
+        <@b.form id="advert-form" action="${base}/manage/advert/persist" method="post" valids=['advert.idc','advert.name']>
+        <@b.hidden name="advert.id" value="${(advert.id)!}"/>
+        <li><label for="advert.idc">IDC: </label><@b.text name="advert.idc" value="${(advert.idc)!}"/></li>
+        <li><label for="advert.name">Name: </label><@b.text name="advert.name" value="${(advert.name)!}"/></li>
+        <li><label for="advert.seq">Seq: </label><@b.text name="advert.seq" value="${(advert.seq)!}" size="4"/></li>
+        <li><label for="open">Open: </label><@b.checkbox name="open" value="true" checked=(advert.open)!false/></li>
+        <li><label for="advert.code">Code: </label><@b.textarea id="advert.code" name="advert.code" cols="50" rows="10">${(advert.code)!}</@></li>
+        <li><@b.submit value="submit" class="button"/></li>
+        </@>
+    </ul>
+</#macro>

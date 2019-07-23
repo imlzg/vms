@@ -1,0 +1,124 @@
+<#import "/WEB-INF/component/movie.cm"   as en />
+
+<#macro view plot={} cls=''>
+    <#if (plot?has_content)>
+    <dl class="${cls}">
+        <dt>${(plot.title)!}</dt>
+        <dd>${b.htmlFormat(plot.content)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+        <#list lst as plot>
+        <li><a href="${viewURL(plot)}" title="${(plot.title)!}">${(plot.title)!}</a></li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro summaries lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as plot>
+    <dl class="${cls}">
+        <dt><a href="${base}/plot/${(plot.id)!}" title="${(plot.title)!}">${(plot.title)!}</a></dt>
+        <dd>
+        ${b.plainString(plot.content, 72)}
+        </dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro description lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as plot>
+    <dl class="${cls}">
+        <dt><a href="${base}/plot/${(plot.id)!}" title="${(plot.title)!}">${(plot.title)!}</a></dt>
+        <dd class="pic">
+            <#if (plot.movie.image)?has_content>
+            <a href="${en.viewURL(plot.movie)}" title="${(plot.movie.title)!}"><img src="${en.picURL(plot.movie, 'small')}" alt="${(plot.movie.title)!}"/></a>
+            </#if>
+        </dd>
+        <dd class="des">
+        <#if (plot.content)?has_content>
+        <#if (plot.content?length > 48)>
+        ${(plot.content)!?substring(0, 48)?replace('[\\s|　]+', '', 'r')}...<#t>
+        <#else>
+        ${(plot.content)!?substring(0, plot.content?length)?replace('[\\s|　]+', '', 'r')}<#t>
+        </#if>
+        </#if>
+        </dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro add movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.actionErrs/>
+    <@b.actionMsgs/>
+    <@b.validate fields=['plot.title','plot.content']/>
+    <@b.form action="${base}/saveplot" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li><label for="plot.title">标题:</label><@b.text id="plot.title" name="plot.title" size="48"/> </li>
+        <li><label for="plot.content">内容: </label><@b.textarea id="plot.content" name="plot.content" cols="50" rows="10"/> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro edit plot={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/persistplot" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="plot.id" value="${(plot.id)!}"/>
+        <li><label for="plot.name">标题:</label><@b.text id="plot.title" name="plot.title" value="${(plot.title)!}" size="48"/> </li>
+        <li><label for="plot.content">内容: </label><@b.textarea id="plot.content" name="plot.content" cols="50" rows="10">${(plot.content)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as plot>
+        <li>
+            <a href="${base}/manage/plot/update_${story.id}">${(plot.id)!}-${(plot.title)!}</a> |
+            <a href="${base}/manage/plot/remove_${plot.id}">remove</a>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form plot={} movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/plot/persist" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <@b.hidden name="plot.id" value="${(plot.id)!}"/>
+        <li><label for="plot.name">标题:</label><@b.input id="plot.title" name="plot.title" value="${(plot.title)!}" size="48"/> </li>
+        <li><label for="plot.content">内容: </label><@b.textarea id="plot.content" name="plot.content" cols="50" rows="10">${(plot.content)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#function viewURL plot={}>
+    <#return base + '/plot/' + (plot.id)!/>
+</#function>

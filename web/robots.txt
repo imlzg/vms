@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /manage
+Disallow: /manage/
+Disallow: /security/
+Disallow: /go
+
+Sitemap: http://www.tvlian.com/sitemap_index.xml

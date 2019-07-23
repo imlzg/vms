@@ -1,0 +1,17 @@
+<#import "/WEB-INF/component/port.cm"  as pt />
+<html>
+<head>
+    <title>${(port.name)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(port.name)!}</h1>
+    <div class="left">
+${(port.content)!}
+    </div>
+    <div class="righ">
+        <@pt.ls lst=ports cls='' />
+    </div>
+</div>
+</body>
+</html>

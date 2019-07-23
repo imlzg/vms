@@ -1,0 +1,11 @@
+<#import "/WEB-INF/component/topic.cm" as tp />
+<html>
+<head>
+    <title>新话题</title>
+</head>
+<body>
+<div id="content">
+    <@tp.add movie=movie cls='add-topic'><h2>新话题...</h2></@>
+</div>
+</body>
+</html>

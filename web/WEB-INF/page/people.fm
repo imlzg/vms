@@ -1,0 +1,23 @@
+<#import "/WEB-INF/component/movie.cm" as mv />
+<#import "/WEB-INF/component/tag.cm"   as tg />
+<html>
+<head>
+    <title>${(user.name)!}</title>
+    <meta name="keywords" content="${(user.name)!}" />
+    <meta name="description" content="${(user.name)!}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(user.name)!}</h1>
+    <div class="left">
+        <@mv.pic lst=wants cls='pic'><h2>想看...</h2></@>
+        <br class="clear" />
+        <@mv.pic lst=seens cls='pic'><h2>看过...</h2></@>
+    </div>
+    <div class="righ">
+        <@tg.cloud lst=myTags cls='tags'><h2>标签...</h2></@>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

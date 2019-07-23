@@ -1,0 +1,79 @@
+<#macro head lst=[] cls=''>
+    <ul class="${cls}">
+        <li><a href="${base}/">首页</a></li>
+        <#list lst as port>
+        <li><#if (port_index!=0)>· </#if><a href="${port.url}">${port.name}</a></li>
+        </#list>
+    </ul>
+</#macro>
+
+<#macro search action='' cls=''>
+    <div class="${cls}">
+        <@b.form id="s" name="s" action="${action}">
+            <@b.text id="q" name="q" value="" size="44"/>
+            <@b.select id='c' options={'影视':'0','人物':'1','资讯':'2'}/>
+            <@b.submit value="搜索" class="button"/>
+        </@>
+    </div>
+</#macro>
+
+<#macro ls lst=[] cls=''>
+    <ul class="${cls}">
+        <#list lst as port>
+        <li>· <a href="${port.url}">${port.name}</a></li>
+        </#list>
+    </ul>
+</#macro>
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as port>
+        <li>
+            <@b.form id="port-manage" action="${base}/manage/port/persist" method="post" valids=['port.idc','port.name','port.url']>
+            <@b.hidden name="port.id" value="${(port.id)!}"/>
+            <@b.text name="port.idc" value="${(port.idc)!}" size="7"/>
+            <@b.text name="port.name" value="${(port.name)!}" size="7"/>
+            <@b.text name="port.url" value="${(port.url)!}"/>
+            <@b.text name="port.seq" value="${(port.seq)!}" size="3"/>
+            <@b.select name="port.kind" value=(port.kind)! options={'页眉':'head','页脚':'foot','关于':'about'}/>
+            <@b.checkbox name="open" value="true" checked=(port.open)!false/>
+            <@b.submit value="submit" class="button"/>
+            <a href="${base}/manage/port/update_${port.id}">Update</a>
+            <a href="${base}/manage/port/remove_${port.id}">Remove</a>
+            </@>
+        </li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro form port={} cls=''>
+    <ul class="${cls}">
+        <@b.form id="port-form" action="${base}/manage/port/persist" method="post" valids=['port.idc','port.name','port.url']>
+        <@b.hidden name="port.id" value=(port.id)!/>
+        <li><label for="port.idc">IDC: </label><@b.text name="port.idc" value=(port.idc)!/></li>
+        <li><label for="port.name">Name: </label><@b.text name="port.name" value=(port.name)!/></li>
+        <li><label for="port.url">Url: </label><@b.text name="port.url" value=(port.url)!/></li>
+        <li><label for="port.seq">Seq: </label><@b.text name="port.seq" value="${(port.seq)!}" size="4"/></li>
+        <li><label for="port.open">Open: </label><@b.checkbox name="open" value="true" checked=(port.open)!false/></li>
+        <li><label for="port.kind">Kind: </label><@b.select name="port.kind" value=(port.kind)! options={'页眉':'head','页脚':'foot','关于':'about'}/></li>
+        <li><label for="port.content">Content: </label><@b.textarea id="port.content" name="port.content" cols="50" rows="10">${(port.content)!}</@></li>
+        <li><@b.submit value="submit" class="button"/></li>
+        </@>
+    </ul>
+</#macro>
+
+<#macro setup cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/install" method="post">
+        <li><label for="admin.idc">管理员邮箱：</label><@b.text id="admin.idc" name="admin.idc" size="26"/></li>
+        <li><label for="admin.passwd">管理员密码：</label><@b.password id="admin.passwd" name="admin.passwd" size="26"/></li>
+        <li><label for="admin.name">管理员名号：</label><@b.text id="admin.name" name="admin.name" size="26"/></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>

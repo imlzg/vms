@@ -1,0 +1,146 @@
+<#import "/WEB-INF/component/movie.cm" as en />
+<#import "/WEB-INF/component/user.cm"  as us />
+
+<#macro vote movie={} rating={} cls=''>
+    <#if (movie?has_content)>
+    <#nested>
+    <ul class="${cls}"   id="vote_${((movie.hot)!0)?string('0.##')}_${((rating.value)!0)?string('0.##')}_${(movie.ratings?size)!0}">
+        <li class="chart">
+         <span class="u" id="vote_u"></span>
+         <span class="d" id="vote_d"></span>
+        </li>
+        <li class="vote" id="vote"></li>
+        <li class="tips" id="vote_t"></li>
+        <li class="summary" id="vote_s"></li>
+    </ul>
+    <script type="text/javascript">
+        // <![CDATA[
+        vote('${movie.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
+<#macro vote1 movie={} rating={} cls=''>
+    <#if (movie?has_content)>
+    <ul class="${cls}"   id="vote_${(movie.id)!0}_${((movie.hot)!0)?string('0.##')}_${(rating.id)!0}_${((rating.value)!0)?string('0.##')}_${(movie.ratings?size)!0}">
+        <li class="chart">
+         <span class="u" id="vote_${(movie.id)!}_u"></span>
+         <span class="d" id="vote_${(movie.id)!}_d"></span>
+        </li>
+        <li class="vote" id="vote_${movie.id}"></li>
+        <li class="tips" id="vote_${movie.id}_t"></li>
+        <li class="summary" id="vote_${movie.id}_s"></li>
+    </ul>
+    <script type="text/javascript">
+        // <![CDATA[
+
+        function vv(v){
+            return (v * 10).round(1);
+        }
+
+        var rt = new Rating({
+            scale: 10,
+            callbacks: {
+                onMousemove : function(el){
+                    var stars = el.getParent();
+                    $('vote_${movie.id}_t').set('text', ((1 + stars.bg.getStyle('left').toFloat()/stars.w/stars.scale) * 10).round(1));
+                },
+                onMouseleave: function(el){
+                    $('vote_${movie.id}_t').set('text', '');
+                }
+            }
+        });
+
+        <#if (action.isAnonymous())>
+
+        var eht = $pick(${((movie.hot)!0)?string('0.##')}, 0).toFloat();
+        var eud = (vv(eht) + '').split('.');
+        $('vote_${(movie.id)!}_u').set('text', eud[0]);
+        $('vote_${(movie.id)!}_d').set('text', '.'+$pick(eud[1], 0));
+
+        rt.inject($('vote_${movie.id}'), {
+            value: eht,
+            mask: true,
+            callbacks: {
+                onClick: function(el){
+                     loginDialog('${en.viewURL(movie)}');
+                }
+            }
+        });
+
+        <#assign sm = '<span>您<a href="${base}/signup" id="login-to-vote">登录</a>后可以评分哦！</span>'/>
+        <#assign ers = (movie.ratings?size)!0 />
+        <#if (ers > 0)>
+            <#assign sm = '<span>已有 ' + ers + ' 人评分！</span> ' + sm />
+        </#if>
+        $('vote_${movie.id}_s').set('html', '${sm}');
+
+        $('login-to-vote').addEvent('click', function(e){
+            if(e) e = new Event(e).stop();
+            loginDialog('${en.viewURL(movie)}');
+        });
+
+        <#else>
+
+        function vote(u){
+            var v = $('vote_${movie.id}');
+            var r = v.getParent();
+            var rs = r.get('id').match(/_(\d*)_([\d.]*)_(\d*)_([\d.]*)_(\d*)$/);
+
+            var eid = rs[1];
+            var eht = rs[2].toFloat();
+            var rid = rs[3];
+            var rvl = rs[4];
+            var ers = rs[5].toInt();
+            //alert(rvl);
+
+            //var h = eht.toFloat();
+
+            var eud = (vv(eht) + '').split('.');
+            $('vote_${(movie.id)!}_u').set('text', eud[0]);
+            $('vote_${(movie.id)!}_d').set('text', '.' + $pick(eud[1], 0));
+
+            rt.inject(v, {
+                url: u,
+                value: eht,
+                requests: {
+                    onSuccess: function(txt){
+                        var ts = txt.split('\*');
+                        r.setProperty('id', 'vote_' + eid + '_' + ts[0] + '_' + ts[1] + '_' + ts[2] + '_' + ts[3]);
+                        vote('${en.viewURL(movie)}_vote_' + ts[1] + '_');
+                    }
+                }
+            });
+
+            var sm = $('vote_${movie.id}_s');
+            if (rvl > 0){
+                sm.set('html', '<span>我的评分: ' + vv(rvl) + '</span>');
+            } else {
+                sm.set('html', '<span>轻轻地移动您的鼠标就可以评分哦!</span>');
+            }
+            if (ers > 0){
+                sm.grab(new Element('span', {text: '已有 ' + ers + ' 人评分！'}), 'top');
+            }
+
+        }
+        vote('${en.viewURL(movie)}_vote_<#if (rating?has_content)>${(rating.id)!}_</#if>');
+
+        </#if>
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
+
+
+<#macro manage lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+        <#list lst as douban>
+        <li>${douban.id} ${(douban.chinese)!(douban.title)!} <a href="${base}/manage/douban/update_${douban.id}">Update</a> | <a href="${base}/manage/douban/remove_${douban.id}">Remove</a></li>
+        </#list>
+    </ul>
+    </#if>
+</#macro>
+

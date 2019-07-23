@@ -1,0 +1,21 @@
+<#import "/WEB-INF/component/source.cm" as sc />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+  <title>${(movie.title)!} - 资源</title>
+</head>
+<body>
+<div id="content">
+  <h1>${(movie.title)!} - 资源</h1>
+  <div class="left">
+      <@sc.enum lst=sources cls='sources'/>
+
+  </div>
+  <div class="righ">
+      <@mv.view movie=movie title=true cls='movie'/>
+  </div>
+  <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<#import "/WEB-INF/component/movie.cm"   as en />
+
+<#macro view pict={} size='small' cls=''>
+    <#if (pict?has_content)>
+    <#nested>
+    <ul class="${cls}">
+        <#assign l = (pict.movie.picts)! />
+        <#assign s = l?size />
+        <#assign i = l?seq_index_of(pict) />
+
+        <li class="p"><a href="${picURL(pict, 'original')}" title="${en.makeTitle(pict.movie!)} ${(pict.title)!}"><img src="${picURL(pict, 'original')}" alt="${en.makeTitle(pict.movie!)} ${(pict.title)!}"/></a></li>
+        <li class="n">
+        <#if (i > 0)>
+            <a href="${base}/pict/${(l[i - 1]['id'])!}">上一个</a>
+        </#if>
+        <#if (i < s - 1)>
+            <a href="${base}/pict/${(l[i + 1]['id'])!}">下一个</a>
+        </#if>
+        </li>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] size='medium' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+    <#list lst as pict>
+        <li><a href="${viewURL(pict)}" title="${en.makeTitle(pict.movie!)} ${(pict.title)!}"><img src="${picURL(pict, size)}" alt="${en.makeTitle(pict.movie!)} ${(pict.title)!}"/></a></li>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro add movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li><@b.validate fields=['movie.id']/></li>
+    <@b.form action="${base}/uploadpicts" method="post" enctype="multipart/form-data" valids=['movie.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li><label>1. </label><@b.file name="uploads[0]" size="49" /></li>
+        <li><label>2. </label><@b.file name="uploads[1]" size="49" /></li>
+        <li><label>3. </label><@b.file name="uploads[2]" size="49" /></li>
+        <li><label>4. </label><@b.file name="uploads[3]" size="49" /></li>
+        <li><label>5. </label><@b.file name="uploads[4]" size="49" /></li>
+        <li><label>6. </label><@b.file name="uploads[5]" size="49" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro fetch movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/fetchpicts" method="post" valids=['movie.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li><label>1. </label><@b.text name="urls[0]" size="60" /></li>
+        <li><label>2. </label><@b.text name="urls[1]" size="60" /></li>
+        <li><label>3. </label><@b.text name="urls[2]" size="60" /></li>
+        <li><label>4. </label><@b.text name="urls[3]" size="60" /></li>
+        <li><label>5. </label><@b.text name="urls[4]" size="60" /></li>
+        <li><label>6. </label><@b.text name="urls[5]" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro fancy movie={} cls=''>
+    <dl id="fancy">
+        <dt>
+            <a href="#" id="fancy-browse-images">Browse Images</a> |
+            <a href="#" id="fancy-clear">Clear List</a> |
+            <a href="#" id="fancy-upload">Upload</a>
+        </dt>
+        <dd>
+            <strong class="overall-title">Overall progress</strong><br />
+            <img src="/img/bar.gif" class="progress overall-progress" />
+        </dd>
+        <dd>
+            <strong class="current-title">File Progress</strong><br />
+            <img src="/img/bar.gif" class="progress current-progress" />
+        </dd>
+        <dd class="current-text"></dd>
+        <dd><ul id="fancy-list"></ul></dd>
+    </dl>
+
+	<script type="text/javascript">
+    // <![CDATA[
+        var fancy = new Fancy($('fancy'), $('fancy-list'), {
+            'url': '${base}/fancypict/${(movie.id)!}?${(session.id)!}',
+            'fieldName': 'upload',
+            'onLoad': function() {}
+        });
+
+        $('fancy-browse-images').addEvent('click', function() {
+            fancy.browse({'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'});
+            return false;
+        });
+
+        $('fancy-clear').addEvent('click', function() {
+            fancy.removeFile();
+            return false;
+        });
+
+        $('fancy-upload').addEvent('click', function() {
+            fancy.upload();
+            return false;
+        });
+
+    // ]]>
+	</script>
+</#macro>
+
+<#macro batchSina movie={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li><@b.validate fields=['surl', 'movie.id']/></li>
+    <@b.form action="${base}/batchsinapict" method="post" valids=['surl', 'movie.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li><label>sina ent url</label><@b.text name="surl" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+<#macro edit pict={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li class="p"><a href="${viewURL(pict)}" title="${(pict.movie.title)!}"><img src="${picURL(pict, 'large')}" alt="${(pict.movie.title)!}"/></a></li>
+    <@b.form action="${base}/persistpict" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="pict.id" value="${(pict.id)!}"/>
+        <li><label for="pict.title">Title:</label><@b.text id="pict.title" name="pict.title" value="${(pict.title)!}" size="48"/> </li>
+        <li><label for="pict.dscr">Dscr: </label><@b.textarea id="pict.dscr" name="plot.dscr" cols="50" rows="10">${(plot.dscr)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+
+<#function viewURL pict={}>
+    <#return base + '/pict/' + (pict.id)!/>
+</#function>
+
+
+<#function picURL pict={} size='small'>
+    <#assign url = (options.picUrl)!/>
+    <#if ! (url?ends_with('/'))>
+        <#assign url = url + '/'/>
+    </#if>
+    <#switch size>
+        <#case 'small'>
+            <#return url + 'spic/' + (pict.url)!/>
+            <#break>
+        <#case 'medium'>
+            <#return url + 'mpic/' + (pict.url)!/>
+            <#break>
+        <#case 'large'>
+            <#return url + 'lpic/' + (pict.url)!/>
+            <#break>
+        <#case 'original'>
+            <#return url + 'opic/' + (pict.url)!/>
+            <#break>
+        <#default>
+    </#switch>
+    <#return url + 'spic/' + (pict.url)!/>
+</#function>

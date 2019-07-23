@@ -1,0 +1,22 @@
+<#import "/WEB-INF/component/photo.cm"  as ph />
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/movie.cm"  as en />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <#assign title = ((photo.star.name)!(photo.star.english)!) + '的照片(' + (photo.star.photos?size - (photo.star.photos)?seq_index_of(photo)) + '/' + (photo.star.photos)?size + ') ' + (photo.title)! />    <title>${(title)!}</title>
+    <meta name="keywords" content="${(title)!}" />
+    <meta name="description" content="${(title)!}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(title)!}</h1>
+    <@ph.view photo=photo cls='photo'/>
+    <br class="clear"/>
+    <br />
+    <@b.authz act='/editphoto'><a href="${base}/editphoto/${(photo.id)!}">编辑</a></@>
+    <@b.authz act='/deletephoto'><a href="${base}/deletephoto/${(photo.id)!}" onclick="return confirmDelete();">删除</a></@>
+    <@b.authz act='/makephoto'><a href="${base}/makephoto/${(photo.id)!}">设为图标</a></@>
+</div>
+</body>
+</html>

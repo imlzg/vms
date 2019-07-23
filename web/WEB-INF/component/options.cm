@@ -1,0 +1,35 @@
+<#macro manage options={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/manage/options/persist" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="options.id" value="${(options.id)!}"/>
+        <li><label for="options.name">网站名称:</label><@b.text id="options.name" name="options.name" value="${(options.name)!}" size="48"/> </li>
+        <li><label for="options.domain">网站域名:</label><@b.text id="options.domain" name="options.domain" value="${(options.domain)!}" size="48"/> </li>
+        <li><label for="options.miibei">网站备案:</label><@b.text id="options.miibei" name="options.miibei" value="${(options.miibei)!}" size="48"/> </li>
+        <li><label for="options.period">版权区间:</label><@b.text id="options.period" name="options.period" value="${(options.period)!}" size="48"/> </li>
+        <li><label for="options.url">首页网址:</label><@b.text id="options.url" name="options.url" value="${(options.url)!}" size="48"/> </li>
+        <li><label for="options.manage">管理网址:</label><@b.text id="options.manage" name="options.manage" value="${(options.manage)!}" size="48"/> </li>
+        <li><label for="options.cookie">Cookie:</label><@b.text id="options.cookie" name="options.cookie" value="${(options.cookie)!}" size="48"/> </li>
+        <li><label for="options.phrase">Phrase:</label><@b.text id="options.phrase" name="options.phrase" value="${(options.phrase)!}" size="48"/> </li>
+
+        <li><label for="options.picUrl">影视海报网址:</label><@b.text id="options.picUrl" name="options.picUrl" value="${(options.picUrl)!}" size="48"/> </li>
+        <li><label for="options.picDir">影视海报目录:</label><@b.text id="options.picDir" name="options.picDir" value="${(options.picDir)!}" size="48"/> </li>
+
+        <li><label for="options.doubanKey">豆瓣Key:</label><@b.text id="options.doubanKey" name="options.doubanKey" value="${(options.doubanKey)!}" size="48"/> </li>
+        <li><label for="options.doubanApi">豆瓣Api网址:</label><@b.text id="options.doubanApi" name="options.doubanApi" value="${(options.doubanApi)!}" size="48"/> </li>
+        <li><label for="options.doubanSearch">豆瓣搜索网址:</label><@b.text id="options.doubanSearch" name="options.doubanSearch" value="${(options.doubanSearch)!}" size="48"/> </li>
+
+        <li><label for="options.qqIndex">腾讯明星网址:</label><@b.text id="options.qqIndex" name="options.qqIndex" value="${(options.qqIndex)!}" size="48"/> </li>
+        <li><label for="options.qqInfor">腾讯明星讯息网址:</label><@b.text id="options.qqInfor" name="options.qqInfor" value="${(options.qqInfor)!}" size="48"/> </li>
+        <li><label for="options.qqPics">腾讯明星照片网址:</label><@b.text id="options.qqPics" name="options.qqPics" value="${(options.qqPics)!}" size="48"/> </li>
+        <li><label for="options.qqPict">腾讯明星照片网址:</label><@b.text id="options.qqPict" name="options.qqPict" value="${(options.qqPict)!}" size="48"/> </li>
+
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro copyright options={} cls=''>
+    <span class="${cls}">&copy; ${(options.period)!} ${(options.name)!} ${(options.domain)!}, all rights reserved ${(options.miibei)!}</span><#t>
+</#macro>

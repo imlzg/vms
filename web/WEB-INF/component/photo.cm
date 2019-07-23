@@ -1,0 +1,194 @@
+<#macro view photo={} size='small' cls=''>
+    <#if (photo?has_content)>
+    <#nested>
+    <ul class="${cls}">
+        <#assign l = (photo.star.photos)! />
+        <#assign s = l?size />
+        <#assign i = l?seq_index_of(photo) />
+
+        <li class="p">
+        <#if (i > 0)>
+            <a href="${base}/photo/${(l[i - 1]['id'])!}" title="${s - i}/${s} ${(photo.title)!}"><img src="${picURL(photo, 'original')}" alt="${(photo.star.name)!} ${(photo.star.english)!} ${(photo.title)!}"/></a>
+        <#else>
+            <a href="${base}/star/${photo.star.id}" title="${s - i}/${s} ${(photo.title)!}"><img src="${picURL(photo, 'original')}" alt="${(photo.star.name)!} ${(photo.star.english)!} ${(photo.title)!}"/></a>
+        </#if>
+        </li>
+        <li class="n">
+        <#if (i < s - 1)>
+            <a href="${base}/photo/${(l[i + 1]['id'])!}">< 前页</a>
+        <#else>
+            <span>< 前页</span>
+        </#if>
+        <a href="${base}/star/${photo.star.id}">返回 ${(photo.star.name)!}</a>
+        <#if (i > 0)>
+            <a href="${base}/photo/${(l[i - 1]['id'])!}">后页 ></a>
+        <#else>
+            <span>后页 ></span>
+        </#if>
+        <!-- todo: 点击查看完整尺寸 -- >
+        </li>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro enum lst=[] size='small' cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <ul class="${cls}">
+    <#list lst as photo>
+        <li><a href="${viewURL(photo)}" title="${(photo.star.name)!} ${(photo.star.english)!} ${(photo.title)!}"><img src="${picURL(photo, size)}" alt="${(photo.star.name)!} ${(photo.star.english)!} ${(photo.title)!}"/></a></li>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+<#macro add star={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/uploadphotos" method="post" enctype="multipart/form-data" valids=['star.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="star.id" value="${(star.id)!}"/>
+        <li><label>1. </label><@b.file name="uploads[0]" size="49" /></li>
+        <li><label>2. </label><@b.file name="uploads[1]" size="49" /></li>
+        <li><label>3. </label><@b.file name="uploads[2]" size="49" /></li>
+        <li><label>4. </label><@b.file name="uploads[3]" size="49" /></li>
+        <li><label>5. </label><@b.file name="uploads[4]" size="49" /></li>
+        <li><label>6. </label><@b.file name="uploads[5]" size="49" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro fetch star={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/fetchphotos" method="post" valids=['star.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="star.id" value="${(star.id)!}"/>
+        <li><label>1. </label><@b.text name="urls[0]" size="60" /></li>
+        <li><label>2. </label><@b.text name="urls[1]" size="60" /></li>
+        <li><label>3. </label><@b.text name="urls[2]" size="60" /></li>
+        <li><label>4. </label><@b.text name="urls[3]" size="60" /></li>
+        <li><label>5. </label><@b.text name="urls[4]" size="60" /></li>
+        <li><label>6. </label><@b.text name="urls[5]" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro fancy star={} cls=''>
+    <dl id="fancy">
+        <dt>
+            <a href="#" id="fancy-browse-images">Browse Images</a> |
+            <a href="#" id="fancy-clear">Clear List</a> |
+            <a href="#" id="fancy-upload">Upload</a>
+        </dt>
+        <dd>
+            <strong class="overall-title">Overall progress</strong><br />
+            <img src="/img/bar.gif" class="progress overall-progress" />
+        </dd>
+        <dd>
+            <strong class="current-title">File Progress</strong><br />
+            <img src="/img/bar.gif" class="progress current-progress" />
+        </dd>
+        <dd class="current-text"></dd>
+        <dd><ul id="fancy-list"></ul></dd>
+    </dl>
+
+	<script type="text/javascript">
+    // <![CDATA[
+        var fancy = new Fancy($('fancy'), $('fancy-list'), {
+            'url': '${base}/fancyphoto/${(star.id)!}?${(session.id)!}',
+            'fieldName': 'upload',
+            'onLoad': function() {}
+        });
+
+        $('fancy-browse-images').addEvent('click', function() {
+            fancy.browse({'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'});
+            return false;
+        });
+
+        $('fancy-clear').addEvent('click', function() {
+            fancy.removeFile();
+            return false;
+        });
+
+        $('fancy-upload').addEvent('click', function() {
+            fancy.upload();
+            return false;
+        });
+
+    // ]]>
+	</script>
+</#macro>
+
+<#macro batchSina star={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <@b.form action="${base}/batchsinaphoto" method="post" valids=['surl', 'star.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="star.id" value="${(star.id)!}"/>
+        <li><label>sina ent url</label><@b.text name="surl" size="60" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro batchQQ star={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li><@b.validate fields=['star.qqent', 'star.id']/></li>
+    <@b.form action="${base}/batchqqphoto" method="post" valids=['star.qqent', 'star.id']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="star.id" value="${(star.id)!}"/>
+        <li><label>QQ ent id</label><@b.text name="star.qqent" /></li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+<#macro edit photo={} cls=''>
+    <#nested>
+    <ul class="${cls}">
+    <li class="p"><a href="${viewURL(photo)}" title="${(photo.star.title)!}"><img src="${picURL(photo, 'large')}" alt="${(photo.star.title)!}"/></a></li>
+    <@b.form action="${base}/persistphoto" method="post">
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="photo.id" value="${(photo.id)!}"/>
+        <li><label for="photo.title">Title:</label><@b.text id="photo.title" name="photo.title" value="${(photo.title)!}" size="48"/> </li>
+        <li><label for="photo.dscr">dscr: </label><@b.textarea id="photo.dscr" name="photo.dscr" cols="50" rows="10">${(photo.dscr)!}</@> </li>
+        <li><@b.submit value="submit" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+
+
+
+<#function viewURL photo={}>
+    <#return base + '/photo/' + (photo.id)!/>
+</#function>
+
+
+<#function picURL photo={} size='small'>
+    <#assign url = (options.photoUrl)!/>
+    <#if ! (url?ends_with('/'))>
+        <#assign url = url + '/'/>
+    </#if>
+    <#switch size>
+        <#case 'small'>
+            <#return url + 'spic/' + (photo.url)!/>
+            <#break>
+        <#case 'medium'>
+            <#return url + 'mpic/' + (photo.url)!/>
+            <#break>
+        <#case 'large'>
+            <#return url + 'lpic/' + (photo.url)!/>
+            <#break>
+        <#case 'original'>
+            <#return url + 'opic/' + (photo.url)!/>
+            <#break>
+        <#default>
+    </#switch>
+    <#return url + 'spic/' + (photo.url)!/>
+</#function>

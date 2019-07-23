@@ -1,0 +1,24 @@
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>人物</title>
+</head>
+<body>
+<div id="content">
+    <h1>人物</h1>
+    <div class="left">
+        <@st.gallery lst=page.items cls='star-gallery' />
+        <br class="clear"/>
+        <@b.pagination page=page url=base+ '/' + redirect + '_' cls='pagination'/>
+    </div>
+    <div class="righ">
+        <@mv.gallery lst=movies cls='gallery'><h2>随机...</h2></@>
+        <br class="clear"/>
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

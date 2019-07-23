@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/photo.cm" as ph />
+<#import "/WEB-INF/component/hint.cm"  as h />
+<html>
+<head>
+    <title>编辑“${(photo.title)!'写真'}”</title>
+</head>
+<body>
+<div id="content">
+    <h1>编辑“${(photo.title)!'写真'}”</h1>
+    <div class="left">
+        <@ph.edit photo=photo cls="add-photo" />
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<#import "/WEB-INF/component/plot.cm"   as pt />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(plot.title)!} ${(plot.movie.title)!}</title>
+    <meta name="keywords" content="${(plot.title)!},${(plot.movie.title)!}" />
+    <meta name="description" content="${b.plainString(plot.content, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(plot.title)!} ${(plot.movie.title)!}</h1>
+    <div class="left">
+        <@pt.view plot=plot cls='plot'/>
+        <br class="clear"/>
+        <@b.authz act='/editplot'><a href="${base}/editplot/${(plot.id)!}">编辑</a></@>
+        <@b.authz act='/deleteplot'><a href="${base}/deleteplot/${(plot.id)!}" onclick="return confirmDelete();">删除</a></@>
+        <br />
+        <@pt.enum lst=plot.movie.plots cls='' />
+    </div>
+    <div class="righ">
+        <@mv.view movie=plot.movie title=true cls='movie'/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

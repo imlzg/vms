@@ -1,0 +1,18 @@
+<#import "/WEB-INF/component/movie.cm" as mv />
+<html>
+<head>
+    <title>编辑 ${(movie.title)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(movie.title)!}</h1>
+    <div class="left">
+        <@mv.editDouban movie=movie cls='add-movie'><h2>从豆瓣抓取...</h2></@>
+        <@mv.edit movie=movie cls='add-movie'><h2>全新编辑...</h2></@>
+    </div>
+    <div class="righ">
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

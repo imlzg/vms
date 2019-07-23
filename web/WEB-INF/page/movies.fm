@@ -1,0 +1,25 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/tag.cm"    as tg />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(category.name)!'影视'}</title>
+    <meta name="keywords" content="${(category.name)!}" />
+    <meta name="description" content="${(category.name)!}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(category.name)!'影视'}</h1>
+    <div class="left">
+        <@mv.popu lst=page.items cls='popu'/>
+        <br class="clear"/>
+        <@b.pagination page=page scale=9 url=base+ '/movies_' cls='pagination'/>
+    </div>
+    <div class="righ">
+        <@tg.cloud lst=tags cls="cloud"><h2>标签...</h2></@>
+        <@mv.gallery lst=recommends cls='gallery'><h2>两周推荐...</h2></@>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

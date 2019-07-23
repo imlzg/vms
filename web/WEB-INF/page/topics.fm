@@ -1,0 +1,31 @@
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/topic.cm"  as tp />
+<#import "/WEB-INF/component/reply.cm"  as pt />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(movie.title)!}的话题</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(board.name)!}</h1>
+    <div class="left">
+        <p class="notice">${(board.description)!}</p>
+        <@b.authz act='/addtopic'><a href="${base}/${(movie.category.idc)!?url}/${movie.id}_addtopic" class="btn">发表讨论</a></@>
+        <br />
+        <#if (tops?has_content || (page.items)?has_content)>
+        <ul class="table topic">
+            <li class="title">标题</li><li class="user">作者</li><li class="size">回应</li><li class="date">最后回应</li>
+        </ul>
+        </#if>
+        <@tp.enum lst=tops cls='table topics'/>
+        <@tp.enum lst=page.items cls='table topics'/>
+        <@b.pagination page=page url=base+ '/'+ ((movie.category.idc)!?url) + '/' + ((movie.id)!) + '_topics_' cls='pagination'/>
+    </div>
+    <div class="righ">
+        <@mv.view movie=movie title=true cls='movie'/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

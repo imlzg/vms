@@ -1,0 +1,33 @@
+<#import "/WEB-INF/component/star.cm"   as st />
+<#import "/WEB-INF/component/photo.cm"  as ph />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(star.name)!}</title>
+    <meta name="keywords" content="${(star.name)!} ${(star.english)!}" />
+    <meta name="description" content="${b.plainString(star.description, 128)}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(star.name)!} ${(star.english)!}</h1>
+    <div class="left">
+        <@st.detail star=star cls='star'/>
+    </div>
+    <div class="righ">
+        <@b.authz act='/editstar'><a href="${base}/editstar/${star.id}">编辑</a></@>
+        <@b.authz act='/deletestar'><a href="${base}/deletestar/${star.id}" onclick="return confirmDelete();">删除</a></@>
+        <br class="clear"/>
+        <@b.authz act='/addphoto'><a href="${base}/star/${star.id}_addphoto" class="btn">添加照片</a></@>
+        <br class="clear"/>
+
+        <@mv.gallery lst=movies cls='gallery'><h2>${(star.name)!} ${(star.english)!}的作品... <span class="pl">(<a href="${base}/cast/${star.name} ${(star.english)!}">更多</a>)</span></h2></@>
+        <br class="clear"/>
+
+        <@ph.enum lst=photos size='medium' cls='photo-m'><h2>${(star.name)!} ${(star.english)!}的照片... <span class="pl">(<a href="${base}/star/${star.id}_photos">更多</a>)</span></h2></@>
+        <br class="clear"/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

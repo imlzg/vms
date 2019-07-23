@@ -1,0 +1,28 @@
+<#import "/WEB-INF/component/plot.cm"   as pt />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(movie.title)!} 剧情</title>
+    <meta name="keywords" content="${(movie.title)!} 剧情" />
+    <meta name="description" content="${(movie.title)!} 剧情" />
+</head>
+<body>
+<div id="content">
+    <h1>${(movie.title)!} 剧情</h1>
+    <div class="left">
+        <#if (movie?has_content)>
+            <@pt.summaries lst=plots cls='' />
+        <#else>
+            <@pt.description lst=page.items cls='plot-disc' />
+        </#if>
+    </div>
+    <div class="righ">
+        <@mv.view movie=movie title=true cls='movie'/>
+        <br class="clear"/>
+        <@mv.gallery lst=movies cls='gallery'><h2>随机...</h2></@>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

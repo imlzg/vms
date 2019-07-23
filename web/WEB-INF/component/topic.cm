@@ -1,0 +1,99 @@
+<#import "/WEB-INF/component/user.cm" as us />
+
+<#macro view topic={} cls=''>
+    <#if (topic?has_content)>
+    <dl class="${cls}">
+        <dt>
+        <@b.authz oper=oper domain=topic act='/edittopic'><a href="${base}/edittopic/${(topic.id)!}">编辑</a></@>
+        <@b.authz oper=oper domain=topic act='/deletetopic'><a href="${base}/deletetopic/${(topic.id)!}" onclick="return confirmDelete();">删除</a> |</@>
+        <a href="${us.userHome(topic.user)}">${(topic.user.name)!}</a> 发表于: ${b.date((topic.editTime)!, 'yyyy-MM-dd HH:mm')}
+        </dt>
+        <dd>${b.htmlFormat(topic.content)!}</dd>
+    </dl>
+    </#if>
+</#macro>
+
+<#macro search action='' cls=''>
+    <div class="${cls}">
+        <@b.form id="search-topic" action="${action}">
+            <@b.text name="q" value="" size="40"/>
+            <@b.submit value="搜索" class="button"/>
+        </@>
+    </div>
+</#macro>
+
+<#macro enum lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#list lst as topic>
+    <ul class="${cls}">
+        <li class="title">
+        <a href="${base}/topic/${(topic.id)!}" title="${(topic.title)!}">${(topic.title)!}</a>
+        </li>
+        <li class="user"><a href="${us.userHome(topic.user)}">${(topic.user.name)!}</a></li>
+        <li class="size">${(topic.posts)!?size}</li>
+        <li class="date">${b.date((topic.lastTime)!, 'yy-MM-dd HH:mm')}</li>
+    </ul>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro summaries lst=[] cls=''>
+    <#if (lst?has_content)>
+    <#nested>
+    <#list lst as topic>
+    <dl class="${cls}">
+        <dt><a href="${base}/topic/${(topic.id)!}" title="${(topic.title)!}">${(topic.title)!}</a></dt>
+        <dd>
+        <#if (topic.content)?has_content>
+        <#if (topic.content?length > 128)>
+        ${(topic.content)!?substring(0, 128)?replace('[\\s|　]+', '', 'r')}...<#t>
+        <#else>
+        ${(topic.content)!?substring(0, topic.content?length)?replace('[\\s|　]+', '', 'r')}<#t>
+        </#if>
+        </#if>
+        </dd>
+    </dl>
+    </#list>
+    </#if>
+</#macro>
+
+<#macro column lst=[] cls=''>
+    <#if (lst?has_content)>
+    <ul class="${cls}">
+    <dt><#nested></dt>
+    <#list lst as topic>
+        <dd><a href="${base}/discuz/${(topic.id)!}" title="${(topic.title)!}">${(topic.title)!}</a></dd>
+    </#list>
+    </ul>
+    </#if>
+</#macro>
+
+
+
+<#macro add movie={} cls=''>
+    <#nested>
+    <ul>
+    <@b.actionErrs/>
+    <@b.actionMsgs/>
+    <@b.form id="create-topic" action="${base}/savetopic" method="post" valids=['topic.title','topic.content']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="movie.id" value="${(movie.id)!}"/>
+        <li><label>题目: </label><@b.text name="topic.title" size="53"/></li>
+        <li><label>内容: </label><@b.textarea name="topic.content" cols="60" rows="20"/></li>
+        <li><@b.submit value="ADD" class="button"/></li>
+    </@>
+    </ul>
+</#macro>
+
+<#macro edit topic={} cls=''>
+    <#nested>
+    <ul>
+    <@b.form id="create-topic" action="${base}/persisttopic" method="post" valids=['topic.title','topic.content']>
+        <@b.hidden name="redirect" value="${redirect!}"/>
+        <@b.hidden name="topic.id" value="${(topic.id)!}"/>
+        <li><label>标题: </label><@b.text name="topic.title" value="${(topic.title)!}" size="53"/></li>
+        <li><label>内容: </label><@b.textarea name="topic.content" cols="60" rows="20">${(topic.content)!}</@></li>
+        <li><@b.submit value="UPDATE" class="button"/></li>
+    </@>
+    </ul>
+</#macro>

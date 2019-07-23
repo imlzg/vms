@@ -1,0 +1,30 @@
+<#import "/WEB-INF/component/movie.cm" as mv />
+<html>
+<head>
+    <title>添加</title>
+</head>
+<body>
+<div id="content">
+    <h1>添加${(category.name)!}</h1>
+    <div class="left">
+        <p class="notice">
+            <@b.actionErrs/>
+            <@b.actionMsgs/>
+        </p>
+
+        <@b.authz act='/batchdouban'>
+            <@mv.batchDouban category=category cls='add-movie'><h2>从豆瓣批量抓取...</h2></@>
+        </@>
+
+        <@mv.fetchDouban category=category cls='add-movie'><h2>从豆瓣抓取...</h2></@>
+        <br class="clear"/>
+        <@mv.add category=category cls='add-movie c-form'><h2>全新添加...</h2></@>
+        <br class="clear"/>
+
+    </div>
+    <div class="righ">
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

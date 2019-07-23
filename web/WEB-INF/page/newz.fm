@@ -1,0 +1,23 @@
+<#import "/WEB-INF/component/news.cm"   as nw />
+<#import "/WEB-INF/component/movie.cm"  as en />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>资讯</title>
+    <meta name="keywords" content="资讯" />
+    <meta name="description" content="资讯" />
+</head>
+<body>
+<div id="content">
+    <h1>资讯</h1>
+    <div class="left">
+        <@nw.summaries lst=page.items cls='' />
+        <br class="clear"/>
+        <@b.pagination page=page scale=9 url=base+ '/news' + '_' cls='pagination'/>
+    </div>
+    <div class="righ">
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

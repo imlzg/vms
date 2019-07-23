@@ -1,0 +1,20 @@
+<#import "/WEB-INF/component/collect.cm" as al />
+<#import "/WEB-INF/component/movie.cm"   as mv />
+<#import "/WEB-INF/component/advert.cm"  as ad />
+<html>
+<head>
+    <title>${(collect.name)!}</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(collect.name)!}</h1>
+    <div class="left">
+        <@mv.gallery lst=collect.movies cls='gallery'/>
+    </div>
+    <div class="righ">
+
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

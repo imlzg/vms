@@ -1,0 +1,25 @@
+<#import "/WEB-INF/component/source.cm" as sc />
+<#import "/WEB-INF/component/movie.cm"  as mv />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <title>${(source.name)!} - 资源</title>
+</head>
+<body>
+<div id="content">
+    <h1>${(source.movie.title)!}</h1>
+    <div class="left">
+        <@sc.view source=source cls='source'/>
+        <br class="clear"/>
+        <@b.authz act='/editsource'><a href="${base}/editsource/${(source.id)!}">编辑</a></@>
+        <@b.authz act='/deletesource'><a href="${base}/deletesource/${(source.id)!}" onclick="return confirmDelete();">删除</a></@>
+        <br />
+        <@sc.enum lst=sources cls='sources'><h2>全部...</h2></@>
+    </div>
+    <div class="righ">
+        <@mv.view movie=source.movie title=true cls='movie'/>
+    </div>
+    <div class="side"><@ad.enum lst=adverts/></div>
+</div>
+</body>
+</html>

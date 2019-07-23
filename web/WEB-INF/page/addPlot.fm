@@ -1,0 +1,19 @@
+<#import "/WEB-INF/component/plot.cm" as pt />
+<#import "/WEB-INF/component/hint.cm" as h />
+<html>
+<head>
+    <title>添加剧情</title>
+</head>
+<body>
+<div id="content">
+    <h1>添加剧情</h1>
+    <div class="left">
+        <@pt.add movie=movie cls='add-plot'><h2>添加剧情...</h2></@>
+    </div>
+    <div class="righ">
+        <@h.enum lst=hints cls='hint'/>
+    </div>
+    <div class="side"></div>
+</div>
+</body>
+</html>

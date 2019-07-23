@@ -1,0 +1,11 @@
+<#import "/WEB-INF/component/options.cm" as op />
+<html>
+<head>
+    <title>Options Form</title>
+</head>
+<body>
+<div id="content">
+    <@op.manage options=options/>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<#import "/WEB-INF/component/pict.cm"   as pc />
+<#import "/WEB-INF/component/movie.cm"  as en />
+<#import "/WEB-INF/component/topic.cm"  as tp />
+<#import "/WEB-INF/component/advert.cm" as ad />
+<html>
+<head>
+    <#assign title = en.makeName(pict.movie) + '的海报(' + ((pict.movie.picts)?seq_index_of(pict) + 1) + '/' + (pict.movie.picts)?size + ') ' + (pict.title)! />
+    <title>${(title)!}</title>
+    <meta name="keywords" content="${(title)!}" />
+    <meta name="description" content="${(title)!}" />
+</head>
+<body>
+<div id="content">
+    <h1>${(title)!}</h1>
+    <@pc.view pict=pict cls='pict'/>
+    <br class="clear"/>
+    <br />
+    <a href="${en.viewURL(pict.movie)}">返回 ${en.makeName(pict.movie)}</a><br />
+    <br class="clear"/>
+    <br />
+    <@b.authz act='/editpict'><a href="${base}/editpict/${(pict.id)!}">编辑</a></@>
+    <@b.authz act='/deletepict'><a href="${base}/deletepict/${(pict.id)!}" onclick="return confirmDelete();">删除</a></@>
+    <@b.authz act='/makeposter'><a href="${base}/makeposter/${(pict.id)!}">设为图标</a></@>
+</div>
+</body>
+</html>

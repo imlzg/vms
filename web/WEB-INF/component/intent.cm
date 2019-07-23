@@ -1,0 +1,56 @@
+<#macro vote intent={} cls=''>
+    <#nested>
+    <ul class="${cls}" id="vote_${((intent.movie.hot)!0)?string('0.##')}_${((intent.movie.want)!0)!0}_${(intent.movie.seen)!0}_${((intent.rating)!0)?string('0.##')}">
+        <li class="chart">
+         <span class="u" id="vote_u"></span>
+         <span class="d" id="vote_d"></span>
+        </li>
+        <li class="vote" id="vote1"></li>
+        <li class="tips" id="vote_t"></li>
+        <li class="summary" id="vote_s"></li>
+    </ul>
+    <script type="text/javascript">
+        // <![CDATA[
+        vote1('${intent.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+</#macro>
+
+
+<#assign WANT = 1 />
+<#assign SEEN = 2 />
+
+<#macro gather movie={} collect={} cls=''>
+    <#if (movie?has_content)>
+    <#nested>
+    <span id="collect" class="collect_${(collect.type)!0}">
+        <span class="title">加入我的收藏</span>
+        <span id="collect_want" class="btn1">想看</span>
+        <span id="collect_seen" class="btn1">看过</span>
+    </span>
+    <script type="text/javascript">
+        // <![CDATA[
+        gather('${movie.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
+
+<#macro tag movie={} lst=[] cls=''>
+    <#if (movie?has_content)>
+    <#nested>
+    <span class="${cls}">
+        <span id="tag" class="btn1">标签</span>:
+        <#list lst as tag>
+            <a href="${base}/tag/${(tag.name)!?url}">${(tag.name)!}</a>
+        </#list>
+    </span>
+    <script type="text/javascript">
+        // <![CDATA[
+        tag('${movie.id}', ${action.isAnonymous()?string});
+        // ]]>
+    </script>
+    </#if>
+</#macro>
+
